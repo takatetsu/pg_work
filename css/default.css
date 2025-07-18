@@ -1,0 +1,152 @@
+@charset "utf-8";
+html {
+    height: 100%;
+}
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    line-height:1.4em;
+    color:#333;
+    font-family:Arial, sans-serif;
+    font-size:0.9em;
+}
+a {
+    text-decoration: none;
+}
+
+#container {
+    position: relative;
+    min-height: 100%;
+}
+#header {
+    background-color:#f0f8ff;
+    color:#696969;
+    width: 100%;
+}
+#header a {
+    color:#4169e1;
+}
+#header table {
+    padding-left: 10px;
+}
+#contents {
+    margin-left: 10px;
+    margin-right: 10px;
+    padding-bottom: 50px;
+}
+#footer {
+    background-color:#f0f8ff;
+    color:#696969;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+#footer address {
+    padding-left:10px;
+}
+div.left {
+    float: left
+}
+div.right {
+    float: right;
+}
+div.clear {
+    clear:left;
+    clear:right;
+    clear:both;
+}
+
+table.data{
+    border-top:1px solid #a9a9a9;
+    border-left:1px solid #a9a9a9;
+    border-collapse:collapse;
+    border-spacing:0;
+    background-color:#ffffff;
+    empty-cells:show;
+    font-size: 9pt;
+}
+.data th{
+    border-right:1px solid #a9a9a9;
+    border-bottom:1px solid #a9a9a9;
+    color:#ffffff;
+    background-color:#0000cc;
+    background-position:left top;
+    padding:1px;
+    margin:0;
+    text-align:center;
+    font-weight:normal;
+}
+.data td{
+    border-right:1px solid #a9a9a9;
+    border-bottom:1px solid #a9a9a9;
+    padding:1px;
+    margin:0;
+}
+.data .permanent {
+    background-color:#f5f5f5;
+    color: #000000;
+}
+.tHeader, .tBody {
+    float: left;
+}
+.tHeader {
+    border-bottom: 0px;
+}
+.tBody {
+    overflow-y: scroll;
+    clear:
+    left;
+    border-top: 0px;
+}
+
+/* テキストフォント赤 */
+.fontred {
+    color:#F00;
+}
+/* エラーカラー */
+.errorcolor {
+    background-color:yellow;
+}
+/* 日曜日 */
+.sunday {
+    background-color: pink;
+}
+/* 土曜日 */
+.saturday {
+    background-color: paleturquoise;
+}
+/* 当日 */
+.thisday {
+    background-color: #7db3b3;
+}
+/* フレックス勤務勤務時間確認 */
+.flexcheck {
+    background-color: lightpink;
+}
+/* 警告 */
+.warning {
+    background-color: lightpink;
+}
+/* 異常 */
+.abnormality {
+    background-color: hotpink;
+}
+
+/* 週労働時間超過 */
+.overwork {
+/*
+    color:#F00;
+    font-weight: bold;
+*/
+    background-color: hotpink;
+}
+
+input[disabled] {
+    background-color: #FFF;
+    font-weight: bold;
+}
+select[disabled] {
+    background-color: #FFF;
+    font-weight: bold;
+}

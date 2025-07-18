@@ -1,0 +1,130 @@
+@charset "utf-8";
+
+/* tag */
+body {
+    margin:0;
+    padding:0;
+    font-size:0.9em;
+}
+table .data {
+    border: 1px #1C79C6 solid;
+    border-collapse: collapse;
+}
+.data td {
+    border: 1px #1C79C6 solid;
+    color: #000000;
+}
+.data th {
+    background-color:#CFF;
+    border: 1px #1C79C6 solid;
+    font-weight:normal;
+    color: #000000;
+}
+
+/* class */
+.op {
+
+}
+.c {
+    text-align:center;
+}
+.l {
+    text-align:left;
+}
+.r {
+    text-align:right;
+}
+.fc {
+    float:none;
+}
+.fl {
+    float:left;
+}
+.fr {
+    float:right;
+}
+
+
+/* operator DIV elements */
+.op01 {
+    border: 1px solid #FFFFFF;
+    background-color: #C4D700;
+}
+.op02 {
+    border: 1px solid #FFFFFF;
+    background-color: #00AC97;
+}
+.op03 {
+    border: 1px solid #FFFFFF;
+    background-color: #FFE893;
+}
+.op04 {
+    border: 1px solid #FFFFFF;
+    background-color: #E08024;
+}
+.op05 {
+    border: 1px solid #FFFFFF;
+    background-color: #A8D182;
+}
+.op06 {
+    border: 1px solid #FFFFFF;
+    background-color: #DB5351;
+}
+.op07 {
+    border: 1px solid #FFFFFF;
+    background-color: #00A5E3;
+}
+.op08 {
+    border: 1px solid #FFFFFF;
+    background-color: #F19DB5;
+}
+.op09 {
+    border: 1px solid #FFFFFF;
+    background-color: #F0EB45;
+}
+.op10 {
+    border: 1px solid #FFFFFF;
+    background-color: #ABA536;
+}
+.op11 {
+    border: 1px solid #FFFFFF;
+    background-color: #757CBB;
+}
+.op12 {
+    border: 1px solid #FFFFFF;
+    background-color: #EDF2C5;
+}
+.op13 {
+    border: 1px solid #FFFFFF;
+    background-color: #D5DBCF;
+}
+.op14 {
+    border: 1px solid #FFFFFF;
+    background-color: #F5B090;
+}
+.op15 {
+    border: 1px solid #FFFFFF;
+    background-color: #F6AC19;
+}
+.op16 {
+    border: 1px solid #FFFFFF;
+    background-color: #0098AD;
+}
+.op17 {
+    border: 1px solid #FFFFFF;
+    background-color: #85CBBF;
+}
+.op18 {
+    border: 1px solid #FFFFFF;
+    background-color: #61754E;
+}
+.op99 {
+    border: 1px solid #FFFFFF;
+    background-color: #c0c0c0;
+}
+/* trash cell */
+.trash {
+    color: white;
+    background-color: SteelBlue;
+    height: 26px;
+}

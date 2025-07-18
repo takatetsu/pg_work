@@ -1,0 +1,28 @@
+<div id="header">
+    <table border="0" cellspacing="1" cellpadding="0" width="100%">
+        <tr>
+            <td nowrap align="left">
+                勤務表管理システム&nbsp;
+                <%=Now%>&nbsp;
+                <%=Session("MM_staffname")+"さんようこそ&nbsp;"%>
+            </td>
+            <td nowrap align="right" style="padding-right: 10px;">
+                <% If (Session("MM_is_deduction")="1") Then %>
+                    <a href="inputdeduction.asp">支店控除入力</a>&nbsp;
+                <% End If %>
+                <% If (Session("MM_is_charge"   )="1") Then %>
+                    <a href="inputall.asp">勤務表全体入力</a>&nbsp;
+                <% End If %>
+                <% If (Session("MM_is_superior" )="1") Then %>
+                    <a href="checklist.asp">上長チェック</a>&nbsp;
+                <% End If %>
+                <a href="workstatus.asp">勤務状況確認</a>&nbsp;
+                <% If (Session("MM_is_input"    )="1") Then %>
+                    <a href="inputwork.asp">勤務表入力</a>&nbsp;
+                <% End If %>
+                <a href="prof.asp">設定</a>&nbsp;
+                <a href="<%= MM_Logout %>">ログアウト</a>
+            </td>
+        </tr>
+    </table>
+</div>
