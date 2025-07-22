@@ -241,6 +241,7 @@ If Not Rs_worktbl.EOF Then
                 If workshift = "9" Then
                     currentworkmin = currentworkmin - 210
                 End If
+                sumAbsenceDays       = sumAbsenceDays + 0.5 + operatorAddDays(v_operator)
             Case "3"    '有給休暇
                 sumPaidvacations     = sumPaidvacations + 0.5 + operatorAddDays(v_operator)
                 If (v_is_approval    = "1") Then
@@ -253,8 +254,6 @@ If Not Rs_worktbl.EOF Then
             Case "6"    '保存休暇
                 sumPreservevacations = sumPreservevacations + 0.5 + operatorAddDays(v_operator)
             Case "7"    '半日欠勤
-                sumAbsenceDays       = sumAbsenceDays + 0.5 + operatorAddDays(v_operator)
-            Case "B"    '育児休業
                 sumAbsenceDays       = sumAbsenceDays + 0.5 + operatorAddDays(v_operator)
             Case "8"    'コアタイム振休
                 sumHolidaynumber     = sumHolidaynumber - 0.25 - operatorAddDays(v_operator)
@@ -285,6 +284,7 @@ If Not Rs_worktbl.EOF Then
                 If workshift = "9" Then
                     currentworkmin = currentworkmin - 250
                 End If
+                sumAbsenceDays       = sumAbsenceDays + 0.5
             Case "3"    '有給休暇
                 sumPaidvacations     = sumPaidvacations + 0.5
                 If (v_is_approval    = "1") Then
@@ -297,8 +297,6 @@ If Not Rs_worktbl.EOF Then
             Case "6"    '保存休暇
                 sumPreservevacations = sumPreservevacations + 0.5
             Case "7"    '半日欠勤
-                sumAbsenceDays       = sumAbsenceDays + 0.5
-            Case "B"    '育児休業
                 sumAbsenceDays       = sumAbsenceDays + 0.5
             Case "8"    'コアタイム振休
                 sumHolidaynumber     = sumHolidaynumber - 0.25

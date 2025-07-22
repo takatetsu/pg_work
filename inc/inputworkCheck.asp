@@ -506,6 +506,19 @@ For x = 1 To Request.Form("everyday").count Step 1
                     dayErrorFlag(j)                 = "error"
                 End If
             End If
+            ' 育児休業入力時、出勤区分には入力不可
+            If (Request.Form("morningholiday"  )(i) =  "B" And Request.Form("morningwork"  )(i) <> "0") Then
+                err_relation_55           = 1
+                style_morningholiday(j)   = "errorcolor"
+                style_morningwork   (j)   = "errorcolor"
+                dayErrorFlag(j)           = "error"
+            End If
+            If (Request.Form("afternoonholiday")(i) =  "B" And Request.Form("afternoonwork")(i) <> "0") Then
+                err_relation_55           = 1
+                style_afternoonholiday(j) = "errorcolor"
+                style_afternoonwork   (j) = "errorcolor"
+                dayErrorFlag(j)           = "error"
+            End If
             ' 午前、午後どちらかのに休日区分、出勤区分が入力されている場合、
             ' 午前、午後両方に休日区分、出勤区分の入力がなければエラーとする。
             ' ただし、既に午前、午後の入力チェックでエラーとなっている場合、
@@ -1758,6 +1771,9 @@ If err_relation_53 = 1 Then
 End If
 If err_relation_54 = 1 Then
     errorMsg = errorMsg & "公休日に休出は入力できません。"
+End If
+If err_relation_55 = 1 Then
+    errorMsg = errorMsg & "育児休業入力時は出勤区分には入力できません。"
 End If
 ' 働き方改革対応チェック
 If Request.Form("yearlyOvertimeHidden") + mm2Float(overtimeonly_count) > 398 Then

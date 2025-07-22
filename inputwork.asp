@@ -289,6 +289,25 @@ realworkmin = 0
         <table id="workdata" class="data">
             <% For i = 1 To lastDay Step 1 ' 1日毎の繰り返し処理 %>
             <!-- #include file="inc/view_proc.asp" -->
+            <%
+                Dim disableChildCareLeaveOption
+                disableChildCareLeaveOption = False
+
+                If workshift = "9" Then
+                    Dim currentWeekday
+                    currentWeekday = Weekday(DateSerial(left(ymb, 4), right(ymb, 2), i))
+
+                    ' Check for Saturday or Sunday
+                    If currentWeekday = 1 Or currentWeekday = 7 Then
+                        disableChildCareLeaveOption = True
+                    End If
+
+                    ' Check for public holiday (from holidaytbl via view_proc.asp)
+                    If disableChildCareLeaveOption = False And v_morningholiday = "1" Then
+                        disableChildCareLeaveOption = True
+                    End If
+                End If
+            %>
             <tr>
                 <%
                 weekNameKanji = WeekdayName(Weekday(DateSerial(left(ymb, 4), right(ymb, 2), i)), true)
@@ -392,7 +411,9 @@ realworkmin = 0
                         <option value="5" <% If (v_morningholiday="5") Then Response.Write("selected") End If %>>特別休暇</option>
                         <option value="6" <% If (v_morningholiday="6") Then Response.Write("selected") End If %>>保存休暇</option>
                         <option value="7" <% If (v_morningholiday="7") Then Response.Write("selected") End If %>>欠勤</option>
+                        <% If Not (workshift = "9" And disableChildCareLeaveOption) Then %>
                         <option value="B" <% If (v_morningholiday="B") Then Response.Write("selected") End If %>>育児休業</option>
+                        <% End If %>
                     </select><br>
                     <select
                         name="morningwork"
@@ -434,7 +455,9 @@ realworkmin = 0
                         <option value="5" <% If (v_afternoonholiday="5") Then Response.Write("selected") End If %>>特別休暇</option>
                         <option value="6" <% If (v_afternoonholiday="6") Then Response.Write("selected") End If %>>保存休暇</option>
                         <option value="7" <% If (v_afternoonholiday="7") Then Response.Write("selected") End If %>>欠勤</option>
+                        <% If Not (workshift = "9" And disableChildCareLeaveOption) Then %>
                         <option value="B" <% If (v_afternoonholiday="B") Then Response.Write("selected") End If %>>育児休業</option>
+                        <% End If %>
                     </select><br>
                     <select
                         name="afternoonwork"
