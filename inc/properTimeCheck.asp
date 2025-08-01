@@ -1,31 +1,35 @@
 <%
 ' -------------------------------------------------------------------------
-' ˜J“­ŠÔ“K³‰»ƒ`ƒFƒbƒN
-' ˆø”Fv_operator      ƒIƒyƒŒ[ƒ^
-'       v_morningwork   o‹Î‹æ•ª(Œß‘O)
-'       v_afternoonwork o‹Î‹æ•ª(ŒßŒã)
-'       cometime        o‹Î
-'       leavetime       ‘Ş‹Î
-'       pc_ontime       PC‹N“®
-'       pc_offtime      PCI—¹
-'       dayduty         “ú’¼
-'       nightduty       h’¼
-'       nightduty2      ‘O“úh’¼
-'       overtime_begin  ŠÔŠOŠJn
-'       overtime_end    ŠÔŠOI—¹
-'       memo2           ƒƒ‚‚Q
-'       opentime        n‹Æ
-'       closetime       I‹Æ
-'       is_unionexecutive ‘g‡·s–ğˆõ
-'       v_operator      ‘O“úŒğ‘Ö‹Î–±
-' –ß’lF0     ƒGƒ‰[‚È‚µ
-'       0ˆÈŠO ƒGƒ‰[
+' åŠ´åƒæ™‚é–“é©æ­£åŒ–ãƒã‚§ãƒƒã‚¯
+' å¼•æ•°ï¼šv_operator      ã‚ªãƒšãƒ¬ãƒ¼ã‚¿
+'       v_morningwork   å‡ºå‹¤åŒºåˆ†(åˆå‰)
+'       v_afternoonwork å‡ºå‹¤åŒºåˆ†(åˆå¾Œ)
+'       cometime        å‡ºå‹¤æ™‚åˆ»
+'       leavetime       é€€å‹¤æ™‚åˆ»
+'       pc_ontime       PCèµ·å‹•æ™‚åˆ»
+'       pc_offtime      PCçµ‚äº†æ™‚åˆ»
+'       dayduty         æ—¥ç›´
+'       nightduty       å®¿ç›´
+'       nightduty2      å‰æ—¥å®¿ç›´
+'       overtime_begin  æ™‚é–“å¤–é–‹å§‹æ™‚åˆ»
+'       overtime_end    æ™‚é–“å¤–çµ‚äº†æ™‚åˆ»
+'       memo2           ãƒ¡ãƒ¢ï¼’
+'       opentime        å§‹æ¥­æ™‚åˆ»
+'       closetime       çµ‚æ¥­æ™‚åˆ»
+'       is_unionexecutive çµ„åˆåŸ·è¡Œå½¹å“¡
+'       v_operator      å‰æ—¥äº¤æ›¿å‹¤å‹™
+'       workshift       å‹¤å‹™ä½“ç³»
+'       wk_work_begin   å‡ºç¤¾ç”³è«‹æ™‚åˆ»
+'       wk_work_end     é€€ç¤¾ç”³è«‹æ™‚åˆ»
+' æˆ»å€¤ï¼š0     ã‚¨ãƒ©ãƒ¼ãªã—
+'       0ä»¥å¤– ã‚¨ãƒ©ãƒ¼
 ' -------------------------------------------------------------------------
 Function workTimeCheck(v_operator, v_morningwork, v_afternoonwork, cometime, _
                        leavetime, pc_ontime, pc_offtime, dayduty, nightduty, _
                        nightduty2, overtime_begin, overtime_end, memo2, _
-                       opentime, closetime, is_unionexecutive, v_operator2)
-    ' Function“à‚Å‚Ì”’l•ÏX‚É”õ‚¦A•Ê•Ï”‚Åˆ—‚ğs‚¤
+                       opentime, closetime, is_unionexecutive, v_operator2, _
+                       workshift, wk_work_begin, wk_work_end)
+    ' Functionå†…ã§ã®æ•°å€¤å¤‰æ›´ã«å‚™ãˆã€åˆ¥å¤‰æ•°ã§å‡¦ç†ã‚’è¡Œã†
     c_operator          = v_operator
     c_morningwork       = v_morningwork
     c_afternoonwork     = v_afternoonwork
@@ -40,141 +44,143 @@ Function workTimeCheck(v_operator, v_morningwork, v_afternoonwork, cometime, _
     c_overtime_end      = overtime_end
     c_memo2             = memo2
     c_is_unionexecutive = is_unionexecutive
-    ' yo‹Îó‹µ‚É‰‚¶‚½ƒ`ƒFƒbƒN—p‚ÌŠî€‚ğİ’è‚µA•K—v‚Èƒ`ƒFƒbƒN€–Ú‚Ìƒtƒ‰ƒO‚ğ1‚É‚·‚éz
-    workTimeCheck  = "0"        ' ”»’è–ß’l
-    ref_starttime  = opentime   ' Šî€A‹ÆŠJn
-    ref_endtime    = closetime  ' Šî€A‹ÆI—¹
-    res_timeDev    = "0"        ' o‘Ş‹ÎAPC‹N“®’â~˜¨—£ƒ`ƒFƒbƒNŒ‹‰Ê
-    res_comeCheck  = "0"        ' ŠJnƒ`ƒFƒbƒNŒ‹‰Ê
-    res_outCheck   = "0"        ' I—¹ƒ`ƒFƒbƒNŒ‹‰Ê
-    flg_checkStart = "0"        ' ŠJnŠÔƒ`ƒFƒbƒN‚·‚é‚©‚Ìƒtƒ‰ƒO 0:ƒ`ƒFƒbƒN‚µ‚È‚¢ 1:ƒ`ƒFƒbƒN‚·‚é
-    flg_checkEnd   = "0"        ' I—¹ŠÔƒ`ƒFƒbƒN‚·‚é‚©‚Ìƒtƒ‰ƒO 0:ƒ`ƒFƒbƒN‚µ‚È‚¢ 1:ƒ`ƒFƒbƒN‚·‚é
-    dif_startTime  = 30         ' oĞƒ`ƒFƒbƒN—P—\ŠÔ(•ª)
-    dif_endTime    = 50         ' ‘ŞĞƒ`ƒFƒbƒN—P—\ŠÔ(•ª)
+    c_workshift         = workshift
+    c_wk_work_begin     = editTime(wk_work_begin)
+    c_wk_work_end       = editTime(wk_work_end)
+    ' ã€å‡ºå‹¤çŠ¶æ³ã«å¿œã˜ãŸãƒã‚§ãƒƒã‚¯ç”¨ã®åŸºæº–æ™‚åˆ»ã‚’è¨­å®šã—ã€å¿…è¦ãªãƒã‚§ãƒƒã‚¯é …ç›®ã®ãƒ•ãƒ©ã‚°ã‚’1ã«ã™ã‚‹ã€‘
+    workTimeCheck  = "0"        ' åˆ¤å®šæˆ»å€¤
+    ref_starttime  = opentime   ' åŸºæº–å°±æ¥­é–‹å§‹æ™‚åˆ»
+    ref_endtime    = closetime  ' åŸºæº–å°±æ¥­çµ‚äº†æ™‚åˆ»
+    res_timeDev    = "0"        ' å‡ºé€€å‹¤æ™‚åˆ»ã€PCèµ·å‹•åœæ­¢æ™‚åˆ»ä¹–é›¢ãƒã‚§ãƒƒã‚¯çµæœ
+    res_comeCheck  = "0"        ' é–‹å§‹æ™‚åˆ»ãƒã‚§ãƒƒã‚¯çµæœ
+    res_outCheck   = "0"        ' çµ‚äº†æ™‚åˆ»ãƒã‚§ãƒƒã‚¯çµæœ
+    flg_checkStart = "0"        ' é–‹å§‹æ™‚é–“ãƒã‚§ãƒƒã‚¯ã™ã‚‹ã‹ã®ãƒ•ãƒ©ã‚° 0:ãƒã‚§ãƒƒã‚¯ã—ãªã„ 1:ãƒã‚§ãƒƒã‚¯ã™ã‚‹
+    flg_checkEnd   = "0"        ' çµ‚äº†æ™‚é–“ãƒã‚§ãƒƒã‚¯ã™ã‚‹ã‹ã®ãƒ•ãƒ©ã‚° 0:ãƒã‚§ãƒƒã‚¯ã—ãªã„ 1:ãƒã‚§ãƒƒã‚¯ã™ã‚‹
+    dif_startTime  = 30         ' å‡ºç¤¾æ™‚åˆ»ãƒã‚§ãƒƒã‚¯çŒ¶äºˆæ™‚é–“(åˆ†)
+    dif_endTime    = 30         ' é€€ç¤¾æ™‚åˆ»ãƒã‚§ãƒƒã‚¯çŒ¶äºˆæ™‚é–“(åˆ†)
 
-    ' ƒƒ‚2”»’è
+    ' ãƒ¡ãƒ¢2åˆ¤å®š
     If c_memo2 = "1" Or c_memo2 = "2" Then
-        ' ’Ê‹Îa‘Ø‰ñ”ğA“dÔŠÔ“s‡‚Ì‚Æ‚«o‹Îƒ`ƒFƒbƒN‚Íƒ`ƒFƒbƒN‘ÎÛŠO‚Æ‚·‚é
+        ' é€šå‹¤æ¸‹æ»å›é¿ã€é›»è»Šæ™‚é–“éƒ½åˆã®ã¨ãå‡ºå‹¤æ™‚åˆ»ãƒã‚§ãƒƒã‚¯ã¯ãƒã‚§ãƒƒã‚¯å¯¾è±¡å¤–ã¨ã™ã‚‹
         c_cometime = ""
     End If
     If c_memo2 = "2" Or c_memo2 = "4" Then
-        ' “dÔŠÔ“s‡A§e‰ïŠÔ‘Ò‚Ì‚Æ‚«‘ŞĞ‚Íƒ`ƒFƒbƒN‘ÎÛŠO‚Æ‚·‚é
+        ' é›»è»Šæ™‚é–“éƒ½åˆã€æ‡‡è¦ªä¼šæ™‚é–“å¾…ã®ã¨ãé€€ç¤¾æ™‚åˆ»ã¯ãƒã‚§ãƒƒã‚¯å¯¾è±¡å¤–ã¨ã™ã‚‹
         c_leavetime  = ""
     End If
     If c_memo2 = "3" Then
-        ' ‘g‡Šˆ“®‚Ì‚Æ‚«‘ŞĞ‚Íƒ`ƒFƒbƒN‘ÎÛŠO‚Æ‚·‚é
+        ' çµ„åˆæ´»å‹•ã®ã¨ãé€€ç¤¾æ™‚åˆ»ã¯ãƒã‚§ãƒƒã‚¯å¯¾è±¡å¤–ã¨ã™ã‚‹
         c_leavetime  = ""
         If c_is_unionexecutive = "1" Then
-            ' ‘g‡·s•”‚Ì‚Æ‚«PCI—¹‚àƒ`ƒFƒbƒN‘ÎÛŠO‚Æ‚·‚é
+            ' çµ„åˆåŸ·è¡Œéƒ¨ã®ã¨ãPCçµ‚äº†æ™‚åˆ»ã‚‚ãƒã‚§ãƒƒã‚¯å¯¾è±¡å¤–ã¨ã™ã‚‹
             c_pc_offtime = ""
         End If
     End If
     If c_memo2 = "5" Then
-        ' PCÁ‚µ–Y‚ê‚Ì‚Æ‚«PCI—¹‚Íƒ`ƒFƒbƒN‘ÎÛŠO‚Æ‚·‚é
+        ' PCæ¶ˆã—å¿˜ã‚Œã®ã¨ãPCçµ‚äº†æ™‚åˆ»ã¯ãƒã‚§ãƒƒã‚¯å¯¾è±¡å¤–ã¨ã™ã‚‹
         c_pc_offtime = ""
     End If
 
-    dec_starttime  = setTime(c_cometime,  c_pc_ontime,  "0") ' ”»’è—pŠJn
-    dec_endtime    = setTime(c_leavetime, c_pc_offtime, "1") ' ”»’è—pI—¹
+    dec_starttime  = setTime(c_cometime,  c_pc_ontime,  "0") ' åˆ¤å®šç”¨é–‹å§‹æ™‚åˆ»
+    dec_endtime    = setTime(c_leavetime, c_pc_offtime, "1") ' åˆ¤å®šç”¨çµ‚äº†æ™‚åˆ»
 
     If c_operator = "0" Then
-        ' Œğ‘ã‹Î–±ˆÈŠO(ˆê”Ê‹Î–±)
+        ' äº¤ä»£å‹¤å‹™ä»¥å¤–(ä¸€èˆ¬ã€ãƒ•ãƒ¬ãƒƒã‚¯ã‚¹å‹¤å‹™)
         If c_morningwork = "1" Or _
            c_morningwork = "4" Or _
            c_morningwork = "5" Or _
            c_morningwork = "9" Then
-            ' Œß‘Oo‹Î(U‘Öo‹ÎAo’£(o‹Î)Ao’£(U‘Öo‹Î)Ao‹Î)
+            ' åˆå‰å‡ºå‹¤(æŒ¯æ›¿å‡ºå‹¤ã€å‡ºå¼µ(å‡ºå‹¤)ã€å‡ºå¼µ(æŒ¯æ›¿å‡ºå‹¤)ã€å‡ºå‹¤)
             If c_afternoonwork = "1" Or _
                c_afternoonwork = "4" Or _
                c_afternoonwork = "5" Or _
                c_afternoonwork = "9" Then
-                ' Œß‘Oo‹ÎEŒßŒão‹Î(U‘Öo‹ÎAo’£(o‹Î)Ao’£(U‘Öo‹Î)Ao‹Î)
+                ' åˆå‰å‡ºå‹¤ãƒ»åˆå¾Œå‡ºå‹¤(æŒ¯æ›¿å‡ºå‹¤ã€å‡ºå¼µ(å‡ºå‹¤)ã€å‡ºå¼µ(æŒ¯æ›¿å‡ºå‹¤)ã€å‡ºå‹¤)
                 ref_starttime  = opentime
                 ref_endtime    = closetime
                 flg_checkStart = "1"
                 flg_checkEnd   = "1"
             Else
                 If (v_afterwork = "2" Or v_afterwork = "3" Or v_afterwork = "6") Then
-                    ' Œß‘Oo‹ÎEŒßŒã‹xoA‹xo(”¼“ú–¢–)Ao’£(‹xo)
+                    ' åˆå‰å‡ºå‹¤ãƒ»åˆå¾Œä¼‘å‡ºã€ä¼‘å‡º(åŠæ—¥æœªæº€)ã€å‡ºå¼µ(ä¼‘å‡º)
                     ref_endtime    = c_overtime_end
                 Else
-                    ' Œß‘Oo‹ÎEŒßŒão‹Î‚¹‚¸
+                    ' åˆå‰å‡ºå‹¤ãƒ»åˆå¾Œå‡ºå‹¤ã›ãš
                     ref_endtime    = "12:00"
                 End If
                 ref_starttime  = opentime
                 flg_checkStart = "1"
                 flg_checkEnd   = "1"
-                dif_endTime    = 30
             End If
         Else
              If (c_morningwork = "2" Or c_morningwork = "3" or c_morningwork = "6") Then
-                ' Œß‘O‹xoA‹xo(”¼“ú–¢–)Ao’£(‹xo)
+                ' åˆå‰ä¼‘å‡ºã€ä¼‘å‡º(åŠæ—¥æœªæº€)ã€å‡ºå¼µ(ä¼‘å‡º)
                 If c_afternoonwork = "1" Or _
                    c_afternoonwork = "4" Or _
                    c_afternoonwork = "5" Or _
                    c_afternoonwork = "9" Then
-                    ' Œß‘O‹xoA‹xo(”¼“ú–¢–)Ao’£(‹xo)EŒßŒão‹Î(U‘Öo‹ÎAo’£(o‹Î)Ao’£(U‘Öo‹Î)Ao‹Î)
+                    ' åˆå‰ä¼‘å‡ºã€ä¼‘å‡º(åŠæ—¥æœªæº€)ã€å‡ºå¼µ(ä¼‘å‡º)ãƒ»åˆå¾Œå‡ºå‹¤(æŒ¯æ›¿å‡ºå‹¤ã€å‡ºå¼µ(å‡ºå‹¤)ã€å‡ºå¼µ(æŒ¯æ›¿å‡ºå‹¤)ã€å‡ºå‹¤)
                     ref_starttime  = c_overtime_begin
                     ref_endtime    = closetime
                     flg_checkStart = "1"
                     flg_checkEnd   = "1"
                 Else
-                    ' Œß‘O‹xoA‹xo(”¼“ú–¢–)Ao’£(‹xo)EŒßŒã‹xoA‹xo(”¼“ú–¢–)Ao’£(‹xo) ‚à‚µ‚­‚Í ŒßŒão‹Î‚¹‚¸ ‚Ì‚Æ‚«
+                    ' åˆå‰ä¼‘å‡ºã€ä¼‘å‡º(åŠæ—¥æœªæº€)ã€å‡ºå¼µ(ä¼‘å‡º)ãƒ»åˆå¾Œä¼‘å‡ºã€ä¼‘å‡º(åŠæ—¥æœªæº€)ã€å‡ºå¼µ(ä¼‘å‡º) ã‚‚ã—ãã¯ åˆå¾Œå‡ºå‹¤ã›ãš ã®ã¨ã
                     ref_starttime  = c_overtime_begin
                     ref_endtime    = c_overtime_end
                     flg_checkStart = "1"
                     flg_checkEnd   = "1"
                 End If
              Else
-                ' Œß‘Oo‹Î‚¹‚¸
+                ' åˆå‰å‡ºå‹¤ã›ãš
                 If c_afternoonwork = "1" Or _
                    c_afternoonwork = "4" Or _
                    c_afternoonwork = "5" Or _
                    c_afternoonwork = "9" Then
-                    ' Œß‘Oo‹Î‚¹‚¸EŒßŒão‹Î(U‘Öo‹ÎAo’£(o‹Î)Ao’£(U‘Öo‹Î)Ao‹Î)
+                    ' åˆå‰å‡ºå‹¤ã›ãšãƒ»åˆå¾Œå‡ºå‹¤(æŒ¯æ›¿å‡ºå‹¤ã€å‡ºå¼µ(å‡ºå‹¤)ã€å‡ºå¼µ(æŒ¯æ›¿å‡ºå‹¤)ã€å‡ºå‹¤)
                     ref_starttime  = "13:00"
                     ref_endtime    = closetime
                     flg_checkStart = "1"
                     flg_checkEnd   = "1"
                 Else
                     If (v_afterwork = "2" Or v_afterwork = "3" Or v_afterwork = "6") Then
-                        ' Œß‘Oo‹Î‚¹‚¸EŒßŒã‹xoA‹xo(”¼“ú–¢–)Ao’£(‹xo)
+                        ' åˆå‰å‡ºå‹¤ã›ãšãƒ»åˆå¾Œä¼‘å‡ºã€ä¼‘å‡º(åŠæ—¥æœªæº€)ã€å‡ºå¼µ(ä¼‘å‡º)
                         ref_starttime  = c_overtime_begin
                         ref_endtime    = c_overtime_end
                         flg_checkStart = "1"
                         flg_checkEnd   = "1"
                     Else
-                        ' Œß‘Oo‹Î‚¹‚¸EŒßŒão‹Î‚¹‚¸
+                        ' åˆå‰å‡ºå‹¤ã›ãšãƒ»åˆå¾Œå‡ºå‹¤ã›ãš
                         If c_cometime <> "" Or c_pc_ontime <> "" Then
                             If c_morningwork = "0" And c_afternoonwork = "0" And c_dayduty = "0" And c_nightduty = "0" Then
-                                ' Œß‘OŒßŒã‚Æ‚ào‹Î‹æ•ª‚Ì“ü—Í‚ª–³‚­A“ú’¼h’¼‚Å‚à‚È‚¢‚Æ‚«ƒGƒ‰[
+                                ' åˆå‰åˆå¾Œã¨ã‚‚å‡ºå‹¤åŒºåˆ†ã®å…¥åŠ›ãŒç„¡ãã€æ—¥ç›´å®¿ç›´ã§ã‚‚ãªã„ã¨ãã‚¨ãƒ©ãƒ¼
                                 res_comeCheck = "1"
                                 res_outCheck  = "1"
                             Else
                                 If c_dayduty <> "0" And c_nightduty =  "0" Then
-                                    ' “ú’¼‚Åh’¼‚Å‚È‚¢‚Æ‚«
+                                    ' æ—¥ç›´ã§å®¿ç›´ã§ãªã„ã¨ã
                                     flg_checkStart = "1"
                                     flg_checkEnd   = "1"
                                 End If
                                 If c_dayduty =  "0" And c_nightduty <> "0" Then
-                                    ' “ú’¼‚Å‚È‚­h’¼‚Ì‚Æ‚«
+                                    ' æ—¥ç›´ã§ãªãå®¿ç›´ã®ã¨ã
                                     flg_checkStart = "1"
                                     ref_starttime  = "17:10"
                                 End If
                                 If c_dayduty <> "0" And c_nightduty <> "0" Then
-                                    ' “ú’¼h’¼‚Ì‚Æ‚«
+                                    ' æ—¥ç›´å®¿ç›´ã®ã¨ã
                                     flg_checkStart = "1"
                                 End If
                             End If
                         End If
                         If c_leavetime <> "" Or c_pc_offtime <> "" Then
                             If c_morningwork = "0" And c_afternoonwork = "0" And c_dayduty = "0" And c_nightduty = "0" And c_nightduty2 = "0" Then
-                                ' Œß‘OŒßŒã‚Æ‚ào‹Î‹æ•ª‚Ì“ü—Í‚ª–³‚­A“ú’¼h’¼‚Å‚È‚­A‘O“úh’¼‚Å‚à‚È‚¢‚Æ‚«ƒGƒ‰[
+                                ' åˆå‰åˆå¾Œã¨ã‚‚å‡ºå‹¤åŒºåˆ†ã®å…¥åŠ›ãŒç„¡ãã€æ—¥ç›´å®¿ç›´ã§ãªãã€å‰æ—¥å®¿ç›´ã§ã‚‚ãªã„ã¨ãã‚¨ãƒ©ãƒ¼
                                 res_comeCheck = "1"
                                 res_outCheck  = "1"
                             Else
                                 If c_dayduty <> "0" And c_nightduty = "0" Then
-                                    ' “ú’¼‚Åh’¼‚Å‚È‚¢‚Æ‚«
+                                    ' æ—¥ç›´ã§å®¿ç›´ã§ãªã„ã¨ã
                                     flg_checkEnd   = "1"
                                 End If
                             End If
@@ -184,92 +190,90 @@ Function workTimeCheck(v_operator, v_morningwork, v_afternoonwork, cometime, _
             End If
         End If
     Else
-        ' Œğ‘ã‹Î–±‚ÉŠY“–
+        ' äº¤ä»£å‹¤å‹™ã«è©²å½“
         If c_operator = "1" or _
            c_operator = "3" or _
            c_operator = "5" Then
-           ' b”Ô‹Î–±(b”ÔA“ú‹ÎbAŒ©K(b))
+           ' ç”²ç•ªå‹¤å‹™(ç”²ç•ªã€æ—¥å‹¤ç”²ã€è¦‹ç¿’(ç”²))
             ref_starttime  = opentime
             ref_endtime    = "20:30"
-            dif_endTime    = 30
             flg_checkStart = "1"
             flg_checkEnd   = "1"
         End If
         If c_operator = "2" or _
            c_operator = "6" Then
-           ' ‰³”Ô‹Î–±(‰³”ÔAŒ©K(‰³))
+           ' ä¹™ç•ªå‹¤å‹™(ä¹™ç•ªã€è¦‹ç¿’(ä¹™))
             ref_starttime  = "20:30"
             flg_checkStart = "1"
         End If
     End If
-    ' ŠÔŠO”»’è
-    If c_overtime_end > opentime Then
-        ' ŠÔŠO‚ª“ü—Í‚³‚ê‚Ä‚¢‚ÄI—¹‚ªn‹ÆˆÈ~‚Ì‚Æ‚«A‘ŞĞƒ`ƒFƒbƒN—P—\ŠÔ‚ğ30•ª‚Æ‚·‚é
-        dif_endTime    = 30
+
+    If c_workshift = "9" Then
+      ref_starttime = wk_work_begin
+      ref_endtime   = wk_work_end
     End If
-    ref_starttime  = setTime(ref_starttime,  c_overtime_begin,  "0") ' ”»’è—pŠJn
-    ref_endtime    = setTime(ref_endtime,    c_overtime_end,    "1") ' ”»’è—pI—¹
+
+    ref_starttime  = setTime(ref_starttime,  c_overtime_begin,  "0") ' åˆ¤å®šç”¨é–‹å§‹æ™‚åˆ»
+    ref_endtime    = setTime(ref_endtime,    c_overtime_end,    "1") ' åˆ¤å®šç”¨çµ‚äº†æ™‚åˆ»
     
-    ' h’¼”»’è
-    If (c_nightduty2 = "1" Or c_nightduty2 = "2") Then ' ‘O“úh’¼
-        ' ‘O“úh’¼‚Ì‚Æ‚«ŠJnƒ`ƒFƒbƒN‚Í–³‹‚·‚é
+    ' å®¿ç›´åˆ¤å®š
+    If (c_nightduty2 = "1" Or c_nightduty2 = "2") Then ' å‰æ—¥å®¿ç›´
+        ' å‰æ—¥å®¿ç›´ã®ã¨ãé–‹å§‹æ™‚åˆ»ãƒã‚§ãƒƒã‚¯ã¯ç„¡è¦–ã™ã‚‹
         res_comeCheck  = "0"
         flg_checkStart = "0"
         If c_morningwork = "0" And c_afternoonwork = "0" And c_dayduty = "0" And c_nightduty = "0" Then
-            ' ‘O“úh’¼‚Å“–“úo‹Î‚È‚µA“ú’¼h’¼‚È‚µ‚Ì‚Æ‚«AI—¹ƒ`ƒFƒbƒN‚ğŠî€08:30A—P—\30•ª‚Ås‚¤
+            ' å‰æ—¥å®¿ç›´ã§å½“æ—¥å‡ºå‹¤ãªã—ã€æ—¥ç›´å®¿ç›´ãªã—ã®ã¨ãã€çµ‚äº†æ™‚åˆ»ãƒã‚§ãƒƒã‚¯ã‚’åŸºæº–æ™‚08:30ã€çŒ¶äºˆ30åˆ†ã§è¡Œã†
             flg_checkEnd   = "1"
             ref_endtime    = "08:30"
-            dif_endTime    = 30
         Else
-            ' ‘O“úh’¼‚Å“–“úo‹Î‚ ‚è‚Ì‚Æ‚«APC‹N“®‚ğƒNƒŠƒA
+            ' å‰æ—¥å®¿ç›´ã§å½“æ—¥å‡ºå‹¤ã‚ã‚Šã®ã¨ãã€PCèµ·å‹•æ™‚åˆ»ã‚’ã‚¯ãƒªã‚¢
             c_pc_ontime = ""
         End If
     End If
-    If (c_nightduty  = "1" Or c_nightduty  = "2") Then ' “–“úh’¼
+    If (c_nightduty  = "1" Or c_nightduty  = "2") Then ' å½“æ—¥å®¿ç›´
         flg_checkEnd   = "0"
     End If
     
-    ' Œğ‘Ö‹Î–±”»’è
-    If (v_operator2 = "2" Or v_operator2 = "4" Or v_operator2 = "6") Then ' ‘O“ú‰³”Ô
-        ' ‘O“ú‰³”Ô‚Ì‚Æ‚«ŠJnƒ`ƒFƒbƒN‚Í–³‹‚·‚é
+    ' äº¤æ›¿å‹¤å‹™åˆ¤å®š
+    If (v_operator2 = "2" Or v_operator2 = "4" Or v_operator2 = "6") Then ' å‰æ—¥ä¹™ç•ª
+        ' å‰æ—¥ä¹™ç•ªã®ã¨ãé–‹å§‹æ™‚åˆ»ãƒã‚§ãƒƒã‚¯ã¯ç„¡è¦–ã™ã‚‹
         res_comeCheck  = "0"
         flg_checkStart = "0"
         If c_morningwork = "0" And c_afternoonwork = "0" Then
-            ' ‘O“ú‰³”Ô‚Å“–“úo‹Î‚È‚µ‚Ì‚Æ‚«AI—¹ƒ`ƒFƒbƒN‚ğŠî€08:30A—P—\30•ª‚Ås‚¤
+            ' å‰æ—¥ä¹™ç•ªã§å½“æ—¥å‡ºå‹¤ãªã—ã®ã¨ãã€çµ‚äº†æ™‚åˆ»ãƒã‚§ãƒƒã‚¯ã‚’åŸºæº–æ™‚08:30ã€çŒ¶äºˆ30åˆ†ã§è¡Œã†
             flg_checkEnd   = "1"
             ref_endtime    = "08:30"
-            dif_endTime    = 30
         Else
-            ' ‘O“ú‰³”Ô‚Å“–“úo‹Î‚ ‚è‚Ì‚Æ‚«APC‹N“®‚ğƒNƒŠƒA
+            ' å‰æ—¥ä¹™ç•ªã§å½“æ—¥å‡ºå‹¤ã‚ã‚Šã®ã¨ãã€PCèµ·å‹•æ™‚åˆ»ã‚’ã‚¯ãƒªã‚¢
             c_pc_ontime = ""
         End If
     End If
     
-    ' yƒ`ƒFƒbƒNz
+    ' ã€æ™‚åˆ»ãƒã‚§ãƒƒã‚¯ã€‘
     If flg_checkStart = "1" And dec_starttime <> "" Then
-        ' ŠJnƒ`ƒFƒbƒN 40•ª‘O‚Ü‚ÅOK
+        ' é–‹å§‹æ™‚åˆ»ãƒã‚§ãƒƒã‚¯
         res_comeCheck = checkTimeInterval(dec_starttime, ref_starttime, dif_startTime)
- 'response.write("<br />START/kijyun:" & ref_starttime & " hantei:" & dec_starttime & " res_comeCheck=" & res_comeCheck & " res_outCheck=" & res_outCheck)
+'response.write("<br />START/kijyun:" & ref_starttime & " hantei:" & dec_starttime & " res_comeCheck=" & res_comeCheck & " res_outCheck=" & res_outCheck & " c_wk_work_begin=" & c_wk_work_begin)
     End If
     If flg_checkEnd   = "1" And dec_endtime   <> "" Then
-        ' I—¹ƒ`ƒFƒbƒN
+        ' çµ‚äº†æ™‚åˆ»ãƒã‚§ãƒƒã‚¯
         res_outCheck  = checkTimeInterval(ref_endtime,   dec_endtime,   dif_endTime)
- 'response.write("<br />E N D/kijyun:" & ref_endtime & " hantei:" & dec_endtime & " yuuyo:" & dif_endTime & " res_outCheck=" & res_outCheck & " res_comeCheck=" & res_comeCheck & "<br />")
+'response.write("<br />E N D/kijyun:" & ref_endtime & " hantei:" & dec_endtime & " yuuyo:" & dif_endTime & " res_outCheck=" & res_outCheck & " res_comeCheck=" & res_comeCheck & " c_wk_work_end=" & c_wk_work_end & "<br />")
     End If
 
-    ' Œ‹‰ÊƒR[ƒhİ’è
+    ' çµæœã‚³ãƒ¼ãƒ‰è¨­å®š
     If res_comeCheck <> "0" Or res_outCheck <> "0" Then
         workTimeCheck = "1"
     End If
 End Function
 
 ' -----------------------------------------------------------------------------
-' ŠÔŠuƒ`ƒFƒbƒN
-' ˆø”Ft1 (ƒ`ƒFƒbƒNŠJn)
-'       t2 (ƒ`ƒFƒbƒNI—¹),
-'       m  (‹–—e•ª”)
-' –ß’lF0 ƒ`ƒFƒbƒNOK
-'       1 t1‚Æt2‚ªm•ª‚æ‚è‚àŠÔŠu‚ªŠJ‚¢‚Ä‚¢‚é‚½‚ßƒGƒ‰[
+' æ™‚åˆ»é–“éš”ãƒã‚§ãƒƒã‚¯
+' å¼•æ•°ï¼št1 (ãƒã‚§ãƒƒã‚¯é–‹å§‹æ™‚åˆ»)
+'       t2 (ãƒã‚§ãƒƒã‚¯çµ‚äº†æ™‚åˆ»),
+'       m  (è¨±å®¹åˆ†æ•°)
+' æˆ»å€¤ï¼š0 ãƒã‚§ãƒƒã‚¯OK
+'       1 t1ã¨t2ãŒmåˆ†ã‚ˆã‚Šã‚‚é–“éš”ãŒé–‹ã„ã¦ã„ã‚‹ãŸã‚ã‚¨ãƒ©ãƒ¼
 ' -----------------------------------------------------------------------------
 Function checkTimeInterval(t1, t2, m)
     checkTimeInterval = "1"
@@ -285,12 +289,12 @@ Function checkTimeInterval(t1, t2, m)
 End Function
 
 ' -----------------------------------------------------------------------------
-' ƒ`ƒFƒbƒN—pİ’è
-' ˆø”Ft1  (ƒ`ƒFƒbƒN‘ÎÛ1)
-'       t2  (ƒ`ƒFƒbƒN‘ÎÛ2),
-'       j   (”»’èƒtƒ‰ƒO 0:‘‚¢•û‚ğæ“¾A0ˆÈŠO:’x‚¢•û‚ğæ“¾),
-' –ß’lFt   t1‚Æt2‚Ì‚¤‚¿j‚Åİ’è‚³‚ê‚½”»’è‚ÌŒ‹‰Ê‚ğ•Ô‚·
-'           ‚Ç‚¿‚ç‚©‚É’l‚ª–³‚¢‚Æ‚«‚Í’l‚ª‚ ‚é•û‚ğ•Ô‚·
+' ãƒã‚§ãƒƒã‚¯ç”¨æ™‚åˆ»è¨­å®š
+' å¼•æ•°ï¼št1  (ãƒã‚§ãƒƒã‚¯å¯¾è±¡æ™‚åˆ»1)
+'       t2  (ãƒã‚§ãƒƒã‚¯å¯¾è±¡æ™‚åˆ»2),
+'       j   (åˆ¤å®šãƒ•ãƒ©ã‚° 0:æ—©ã„æ–¹ã‚’å–å¾—ã€0ä»¥å¤–:é…ã„æ–¹ã‚’å–å¾—),
+' æˆ»å€¤ï¼št   t1ã¨t2ã®ã†ã¡jã§è¨­å®šã•ã‚ŒãŸåˆ¤å®šã®çµæœã‚’è¿”ã™
+'           ã©ã¡ã‚‰ã‹ã«å€¤ãŒç„¡ã„ã¨ãã¯å€¤ãŒã‚ã‚‹æ–¹ã‚’è¿”ã™
 ' -----------------------------------------------------------------------------
 Function setTime(t1, t2, j)
     setTime = ""
@@ -321,18 +325,18 @@ Function setTime(t1, t2, j)
 End Function
 
 ' -----------------------------------------------------------------------------
-' ‘O“úŒğ‘Ö‹Î–±‚ğİ’è
-' ˆø”Fpersonalcode ŒÂlƒR[ƒh
-'       ymb yyyymmdd‚ÌƒtƒH[ƒ}ƒbƒg‚Å“ú•t‚ğİ’è
-' –ß’lFt   ˆø”‚Å“n‚³‚ê‚½“ú•t‚Ì‘O“ú‚ÌŒğ‘Ö‹Î–±‚ğ•Ô‚·
-'           ‚Ç‚¿‚ç‚©‚É’l‚ª–³‚¢‚Æ‚«‚Í’l‚ª‚ ‚é•û‚ğ•Ô‚·
+' å‰æ—¥äº¤æ›¿å‹¤å‹™ã‚’è¨­å®š
+' å¼•æ•°ï¼špersonalcode å€‹äººã‚³ãƒ¼ãƒ‰
+'       ymb yyyymmddã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã§æ—¥ä»˜ã‚’è¨­å®š
+' æˆ»å€¤ï¼št   å¼•æ•°ã§æ¸¡ã•ã‚ŒãŸæ—¥ä»˜ã®å‰æ—¥ã®äº¤æ›¿å‹¤å‹™ã‚’è¿”ã™
+'           ã©ã¡ã‚‰ã‹ã«å€¤ãŒç„¡ã„ã¨ãã¯å€¤ãŒã‚ã‚‹æ–¹ã‚’è¿”ã™
 ' -----------------------------------------------------------------------------
 Function setPreOp(personalcode, ymb)
     setPreOp = ""
-    ' ‘O“ú“ú•tZo
+    ' å‰æ—¥æ—¥ä»˜ç®—å‡º
     predate = DateAdd("d", -1, CDate(Left(ymb,4) & "/" & Mid(ymb,5,2) & "/" & Right(ymb,2)))
     predate = Left(predate,4) & Mid(predate,6,2) & Right(predate,2)
-    ' ‘O“úŒğ‘Ö‹Î–±‚ğ“Ç‚İ‚İİ’è‚·‚é
+    ' å‰æ—¥äº¤æ›¿å‹¤å‹™ã‚’èª­ã¿è¾¼ã¿è¨­å®šã™ã‚‹
     Dim Rs_previous_worktbl
     Dim Rs_previous_worktbl_cmd
     Dim Rs_previous_worktbl_numRows

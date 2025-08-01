@@ -133,24 +133,6 @@ wk_vacationtime_end   = Left(editTime(Request.Form("vacationtime_end" )(i)), 2) 
 wk_memo             = Request.Form("memo" )(i)
 wk_memo2            = Request.Form("memo2")(i)
 
-' 労働時間適正化エラーフラグ
-If gradecode >= "033" Or gradecode = "000" Then
-    ' 課長以上または等級コード00,01はエラーチェック不要
-    temp = "0"
-Else
-    x = Right(Request.Form("YMD")(i), 2) * 1
-    temp = workTimeCheck(wk_operator, _
-        Request.Form("morningwork" )(i), Request.Form("afternoonwork" )(i), _
-        Request.Form("cometime"    )(x), Request.Form("leavetime"     )(x), _
-        Request.Form("pc_ontime"   )(x), Request.Form("pc_offtime"    )(x), _
-        Request.Form("dayduty"     )(i), Request.Form("nightduty"     )(i), _
-        Request.Form("nightduty2"  )(x), Request.Form("overtime_begin")(i), _
-        Request.Form("overtime_end")(i), Request.Form("memo2"         )(i), _
-        Session("MM_opentime"), Session("MM_closetime"), _
-        Session("MM_is_unionexecutive"), wk_operator2)
-End If
-wk_is_error = temp
-
 If workshift <> "9" Then
     wk_work_begin     = ""
     wk_work_end       = ""
@@ -230,6 +212,25 @@ wk_break_begin1 = Left(editTime(temp_break_begin1), 2) & Right(editTime(temp_bre
 wk_break_end1   = Left(editTime(temp_break_end1  ), 2) & Right(editTime(temp_break_end1  ), 2)
 wk_break_begin2 = Left(editTime(temp_break_begin2), 2) & Right(editTime(temp_break_begin2), 2)
 wk_break_end2   = Left(editTime(temp_break_end2  ), 2) & Right(editTime(temp_break_end2  ), 2)
+
+' 労働時間適正化エラーフラグ
+If gradecode >= "033" Or gradecode = "000" Then
+    ' 課長以上または等級コード00,01はエラーチェック不要
+    temp = "0"
+Else
+    x = Right(Request.Form("YMD")(i), 2) * 1
+    temp = workTimeCheck(wk_operator, _
+        Request.Form("morningwork" )(i), Request.Form("afternoonwork" )(i), _
+        Request.Form("cometime"    )(x), Request.Form("leavetime"     )(x), _
+        Request.Form("pc_ontime"   )(x), Request.Form("pc_offtime"    )(x), _
+        Request.Form("dayduty"     )(i), Request.Form("nightduty"     )(i), _
+        Request.Form("nightduty2"  )(x), Request.Form("overtime_begin")(i), _
+        Request.Form("overtime_end")(i), Request.Form("memo2"         )(i), _
+        Session("MM_opentime"), Session("MM_closetime"), _
+        Session("MM_is_unionexecutive"), wk_operator2, workshift, _
+        wk_work_begin, wk_work_end)
+End If
+wk_is_error = temp
 
 wk_workmin = 0
 If workshift = "9" Then ' フレックス勤務者
