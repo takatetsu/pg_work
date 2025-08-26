@@ -40,8 +40,8 @@ Function workTimeCheck(v_operator, v_morningwork, v_afternoonwork, cometime, _
     c_dayduty           = dayduty
     c_nightduty         = nightduty
     c_nightduty2        = nightduty2
-    c_overtime_begin    = overtime_begin
-    c_overtime_end      = overtime_end
+    c_overtime_begin    = editTime(overtime_begin)
+    c_overtime_end      = editTime(overtime_end)
     c_memo2             = memo2
     c_is_unionexecutive = is_unionexecutive
     c_workshift         = workshift
