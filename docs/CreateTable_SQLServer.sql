@@ -1,3 +1,4 @@
+-- 基準労働時間テーブル
 create table [dbo].[baseworktimetbl] (
   [id] int identity not null
   , [updatetime] timestamp not null
@@ -7,7 +8,7 @@ create table [dbo].[baseworktimetbl] (
   , primary key (id)
 );
 
-
+-- コントロールテーブル
 create table [dbo].[controltbl] (
   [id] int not null
   , [updatetime] timestamp not null
@@ -15,7 +16,7 @@ create table [dbo].[controltbl] (
   , primary key (id)
 );
 
-
+-- 支店控除テーブル
 create table [dbo].[deductiontbl] (
   [id] int identity not null
   , [updatetime] timestamp not null
@@ -37,7 +38,7 @@ create table [dbo].[deductiontbl] (
   , primary key (id)
 );
 
-
+-- 勤務表
 create table [dbo].[dutyrostertbl] (
   [id] int identity not null
   , [updatetime] timestamp not null
@@ -87,7 +88,7 @@ create table [dbo].[dutyrostertbl] (
   , primary key (id)
 );
 
-
+-- 公休日
 create table [dbo].[holidaytbl] (
   [id] int identity not null
   , [updatetime] timestamp not null
@@ -97,7 +98,7 @@ create table [dbo].[holidaytbl] (
   , primary key (id)
 );
 
-
+-- IPテーブル
 create table [dbo].[iptbl] (
   [updatetime] timestamp not null
   , [ipnumber] char(15)
@@ -106,7 +107,7 @@ create table [dbo].[iptbl] (
   , [enddate] char(8)
 );
 
-
+-- 組織テーブル
 create table [dbo].[orgtbl] (
   [id] int identity not null
   , [updatetime] timestamp not null
@@ -116,7 +117,14 @@ create table [dbo].[orgtbl] (
   , primary key (id)
 );
 
+-- 組織名テーブル
+create table [dbo].[orgnametbl] (
+  [orgcode] char(6) not null
+  , [orgname] char(100)
+  , primary key (orgcode)
+);
 
+-- 電源時刻テーブル
 create table [dbo].[pctimetbl] (
   [updatetime] timestamp not null
   , [personalcode] char(10)
@@ -126,7 +134,16 @@ create table [dbo].[pctimetbl] (
   , [pcstatus] char(10)
 );
 
+-- 電源時刻MERGE用
+create table [dbo].[pctimemergetbl] (
+  [personalcode] char(10)
+  , [ipnumber] char(15)
+  , [pcdate] char(8)
+  , [pctime] char(4)
+  , [pcstatus] char(10)
+);
 
+--  保存休暇残日数テーブル
 create table [dbo].[remainvacationtbl] (
   [updatetime] timestamp not null
   , [personalcode] char(10)
@@ -134,7 +151,7 @@ create table [dbo].[remainvacationtbl] (
   , [remainvacation] float(53)
 );
 
-
+-- 社員テーブル
 create table [dbo].[stafftbl] (
   [id] int identity not null
   , [updatetime] timestamp not null
@@ -163,7 +180,7 @@ create table [dbo].[stafftbl] (
   , primary key (id)
 );
 
-
+-- タイムテーブル
 create table [dbo].[timetbl] (
   [id] int identity not null
   , [updatetime] timestamp not null
@@ -180,7 +197,20 @@ create table [dbo].[timetbl] (
   , primary key (id)
 );
 
+-- タイムカードテーブル
+create table [dbo].[timecardtbl] (
+  [updatetime] timestamp not null
+  , [datasection] char(2)
+  , [punchdate] char(8)
+  , [punchtime] char(4)
+  , [dutyclass] char(2)
+  , [attendanceclass] char(2)
+  , [personalcode] char(10)
+  , [exceptioncode] char(2)
+  , [terminalcode] char(2)
+);
 
+-- タイプテーブル
 create table [dbo].[typetbl] (
   [id] int identity not null
   , [codetype] char(20)
@@ -192,7 +222,7 @@ create table [dbo].[typetbl] (
   , primary key (id)
 );
 
-
+-- 勤怠テーブル
 create table [dbo].[worktbl] (
   [id] int identity not null
   , [updatetime] timestamp not null
@@ -239,4 +269,3 @@ create table [dbo].[worktbl] (
   , [weekovertime] char(4)
   , primary key (id)
 );
-
