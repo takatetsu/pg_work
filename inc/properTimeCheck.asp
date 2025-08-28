@@ -342,7 +342,7 @@ Function setPreOp(personalcode, ymb)
     Dim Rs_previous_worktbl_numRows
     Set Rs_previous_worktbl_cmd = Server.CreateObject ("ADODB.Command")
     Rs_previous_worktbl_cmd.ActiveConnection = MM_workdbms_STRING
-    Rs_previous_worktbl_cmd.CommandText = "SELECT operator FROM dbo.worktbl WHERE personalcode = ? AND workingdate = ?"
+    Rs_previous_worktbl_cmd.CommandText = "SELECT operator FROM worktbl WHERE personalcode = ? AND workingdate = ?"
     Rs_previous_worktbl_cmd.Prepared = true
     Rs_previous_worktbl_cmd.Parameters.Append Rs_previous_worktbl_cmd.CreateParameter("param1", 200, 1, 5, personalcode)
     Rs_previous_worktbl_cmd.Parameters.Append Rs_previous_worktbl_cmd.CreateParameter("param2", 200, 1, 8, predate)

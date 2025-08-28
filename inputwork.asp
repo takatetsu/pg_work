@@ -27,7 +27,7 @@ If screen = 0 Then
     ' 出退勤ボタン有効無効判定処理
     Set Rs_timetbl_cmd = Server.CreateObject ("ADODB.Command")
     Rs_timetbl_cmd.ActiveConnection = MM_workdbms_STRING
-    Rs_timetbl_cmd.CommandText = "SELECT * FROM dbo.timetbl WHERE personalcode = ? AND workingdate = ?"
+    Rs_timetbl_cmd.CommandText = "SELECT * FROM timetbl WHERE personalcode = ? AND workingdate = ?"
     Rs_timetbl_cmd.Prepared = true
     Rs_timetbl_cmd.Parameters.Append Rs_timetbl_cmd.CreateParameter("param1", 200, 1, 5, target_personalcode)
     Rs_timetbl_cmd.Parameters.Append Rs_timetbl_cmd.CreateParameter("param2", 200, 1, 8, today)
@@ -85,7 +85,7 @@ ElseIf (CStr(Request("MM_update")) = "form1") And screen = "0" Then
         ' stafftbl の締め日付確認
         Set Rs_stafftbl_cmd = Server.CreateObject ("ADODB.Command")
         Rs_stafftbl_cmd.ActiveConnection = MM_workdbms_STRING
-        Rs_stafftbl_cmd.CommandText = "SELECT processed_ymb FROM dbo.stafftbl " & _
+        Rs_stafftbl_cmd.CommandText = "SELECT processed_ymb FROM stafftbl " & _
                                       "WHERE personalcode = '" & target_personalcode & "'"
         Set Rs_stafftbl = Rs_stafftbl_cmd.Execute
         processed_ymb = Rs_stafftbl.Fields.Item("processed_ymb").Value
@@ -119,11 +119,11 @@ If workshift = "9" And errorMsg = "" Then
         "CASE w2.morningholiday WHEN 'A' THEN 1 ELSE 0 END AS holiday, old_workshift_last_ymb FROM " & _
         "(SELECT worktbl.personalcode, worktbl.workingdate, worktbl.morningholiday, " & _
         "stafftbl.old_workshift_last_ymb, " & _
-        "FORMAT(DATEADD(day, -1*DATEPART(WEEKDAY, worktbl.workingdate), worktbl.workingdate)+1, 'yyyyMMdd') AS begindate, " & _
-        "FORMAT(DATEADD(day, 7-DATEPART(WEEKDAY, worktbl.workingdate), worktbl.workingdate), 'yyyyMMdd') AS enddate " & _
+        "to_char(worktbl.workingdate::date - (extract(DOW FROM worktbl.workingdate) || ' days')::interval + INTERVAL '1 day', 'YYYYMMDD') AS begindate, " & _
+        "to_char(worktbl.workingdate::date + (7 - extract(DOW FROM worktbl.workingdate) || ' days')::interval, 'YYYYMMDD') AS enddate " & _
         "FROM worktbl LEFT JOIN stafftbl ON worktbl.personalcode = stafftbl.personalcode " & _
         "WHERE worktbl.personalcode = ? AND (worktbl.workingdate BETWEEN ? AND ? OR " & _
-        "DATEADD(day, -1*DATEPART(WEEKDAY, ?), ?) <= worktbl.workingdate AND " & _
+        "?::date - (extract(DOW FROM ?::date) || ' days')::interval <= worktbl.workingdate AND " & _
         "worktbl.workingdate < ?) AND worktbl.workingdate >= stafftbl.old_workshift_last_ymb) w " & _
         "LEFT JOIN worktbl w2 ON w.personalcode=w2.personalcode AND w.begindate <= w2.workingdate AND " & _
         "w.enddate >= w2.workingdate) x where begindate > old_workshift_last_ymb + '31') y  GROUP BY begindate, enddate HAVING COUNT(*) = 7 AND SUM(holiday) <> 1"

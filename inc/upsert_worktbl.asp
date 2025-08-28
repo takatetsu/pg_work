@@ -304,7 +304,7 @@ If (Request.Form("worktbl_id")(i) = "") Then
         ' -----------------------------------------------------
         ' INSERT worktbl 処理
         ' -----------------------------------------------------
-        MM_editCmd.CommandText = "INSERT INTO dbo.worktbl VALUES(DEFAULT, " & _
+        MM_editCmd.CommandText = "INSERT INTO worktbl VALUES(DEFAULT, " & _
             "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " & _
             "?, ?, ?, ?, ?, ?, ?, ?, '0', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
         MM_editCmd.Prepared = true
@@ -357,7 +357,7 @@ Else
     ' ---------------------------------------------------------
     ' UPDATE worktbl 処理
     ' ---------------------------------------------------------
-    MM_editCmd.CommandText = "UPDATE dbo.worktbl SET " & _
+    MM_editCmd.CommandText = "UPDATE worktbl SET " & _
              "morningwork              = ?," & _
              "afternoonwork            = ?," & _
              "morningholiday           = ?," & _
@@ -397,7 +397,7 @@ Else
              "workmin                  = ?," & _
              "weekovertime             = ? " & _
              "WHERE id                 = ? " & _
-             "AND CONVERT(int,updatetime) = ?"
+             "AND CAST(updatetime AS integer) = ?"
     MM_editCmd.Prepared = true
     MM_editCmd.Parameters.Append MM_editCmd.CreateParameter(,201,,1, wk_morningwork)
     MM_editCmd.Parameters.Append MM_editCmd.CreateParameter(,201,,1, wk_afternoonwork)

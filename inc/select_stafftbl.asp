@@ -7,13 +7,13 @@ Dim Rs_stafftbl_cmd
 Dim Rs_stafftbl_numRows
 Set Rs_stafftbl_cmd = Server.CreateObject ("ADODB.Command")
 Rs_stafftbl_cmd.ActiveConnection = MM_workdbms_STRING
-Rs_stafftbl_cmd.CommandText = "SELECT personalcode, staffname, dbo.stafftbl.gradecode, " & _
-    "dbo.stafftbl.orgcode AS orgcode, is_operator, is_input, is_charge, " & _
+Rs_stafftbl_cmd.CommandText = "SELECT personalcode, staffname, stafftbl.gradecode, " & _
+    "stafftbl.orgcode AS orgcode, is_operator, is_input, is_charge, " & _
     "is_superior, orgname, processed_ymb, holidaytype, grantdate, workshift, " & _
     "old_workshift, old_workshift_last_ymb, base_am_workmin, base_pm_workmin " & _
-    "FROM dbo.stafftbl LEFT JOIN dbo.orgnametbl " & _
-    "ON dbo.stafftbl.orgcode=dbo.orgnametbl.orgcode " & _
-    "WHERE dbo.stafftbl.personalcode = ?"
+    "FROM stafftbl LEFT JOIN orgnametbl " & _
+    "ON stafftbl.orgcode=orgnametbl.orgcode " & _
+    "WHERE stafftbl.personalcode = ?"
 Rs_stafftbl_cmd.Prepared = true
 Rs_stafftbl_cmd.Parameters.Append Rs_stafftbl_cmd.CreateParameter("param1", 200, 1, 5, target_personalcode)
 Set Rs_stafftbl = Rs_stafftbl_cmd.Execute

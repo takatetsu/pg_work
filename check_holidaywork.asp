@@ -92,8 +92,8 @@ Rs_work_cmd.CommandText = "SELECT worktbl.personalcode "    & _
     "LEFT OUTER JOIN orgtbl ON "                            & _
     "orgtbl.orgcode = stafftbl.orgcode "                    & _
     "WHERE worktbl.workingdate LIKE ? AND "                 & _
-    "dbo.stafftbl.is_input = '1' "                          & _
-    "AND dbo.stafftbl.is_enable = '1' AND "                 & _
+    "stafftbl.is_input = '1' "                          & _
+    "AND stafftbl.is_enable = '1' AND "                 & _
     "orgtbl.manageclass = '2' "                             & _
     "AND orgtbl.personalcode = ? "                          & _
     "ORDER BY stafftbl.orgcode, stafftbl.gradecode "        & _
@@ -175,7 +175,7 @@ Set Rs_work = Rs_work_cmd.Execute
                         Dim Rs_dutyrostertbl_numRows
                         Set Rs_dutyrostertbl_cmd = Server.CreateObject ("ADODB.Command")
                         Rs_dutyrostertbl_cmd.ActiveConnection = MM_workdbms_STRING
-                        Rs_dutyrostertbl_cmd.CommandText = "SELECT * FROM dbo.dutyrostertbl " & _
+                        Rs_dutyrostertbl_cmd.CommandText = "SELECT * FROM dutyrostertbl " & _
                             "WHERE personalcode = ? AND ymb <= ? ORDER BY ymb DESC"
                         Rs_dutyrostertbl_cmd.Prepared = true
                         Rs_dutyrostertbl_cmd.Parameters.Append Rs_dutyrostertbl_cmd.CreateParameter("param1", 200, 1, 5, Trim(Rs_staff.Fields.Item("personalcode").Value))
@@ -249,7 +249,7 @@ Set Rs_work = Rs_work_cmd.Execute
                         <% ' 休出回数
                         Set Rs_worktbl_cmd = Server.CreateObject ("ADODB.Command")
                         Rs_worktbl_cmd.ActiveConnection = MM_workdbms_STRING
-                        Rs_worktbl_cmd.CommandText = "SELECT COUNT(*) AS holidaywork FROM dbo.worktbl " & _
+                        Rs_worktbl_cmd.CommandText = "SELECT COUNT(*) AS holidaywork FROM worktbl " & _
                                                      "WHERE personalcode = ? AND workingdate LIKE ? AND " & _
                                                      "(morningwork IN ('2', '3', '6') OR afternoonwork IN ('2', '3', '6'))"
                         Rs_worktbl_cmd.Prepared = true
@@ -292,7 +292,7 @@ Set Rs_work = Rs_work_cmd.Execute
                         Set Rs_dutyrostertbl_cmd = Server.CreateObject ("ADODB.Command")
                         Rs_dutyrostertbl_cmd.ActiveConnection = MM_workdbms_STRING
                         Rs_dutyrostertbl_cmd.CommandText = "SELECT SUM(holidayshifttime + holidayshiftlate) AS holidaytime " & _
-                            "FROM dbo.dutyrostertbl WHERE personalcode = ? AND ymb >= ? AND ymb <= ?"
+                            "FROM dutyrostertbl WHERE personalcode = ? AND ymb >= ? AND ymb <= ?"
                         Rs_dutyrostertbl_cmd.Prepared = true
                         Rs_dutyrostertbl_cmd.Parameters.Append Rs_dutyrostertbl_cmd.CreateParameter("param1", 200, 1, 5, Trim(Rs_staff.Fields.Item("personalcode").Value))
                         Rs_dutyrostertbl_cmd.Parameters.Append Rs_dutyrostertbl_cmd.CreateParameter("param2", 200, 1, 6, businessYear)
@@ -322,7 +322,7 @@ Set Rs_work = Rs_work_cmd.Execute
                         <% ' 休出累回
                         Set Rs_worktbl_cmd = Server.CreateObject ("ADODB.Command")
                         Rs_worktbl_cmd.ActiveConnection = MM_workdbms_STRING
-                        Rs_worktbl_cmd.CommandText = "SELECT COUNT(*) AS holidaywork FROM dbo.worktbl " & _
+                        Rs_worktbl_cmd.CommandText = "SELECT COUNT(*) AS holidaywork FROM worktbl " & _
                                                      "WHERE personalcode = ? AND workingdate >= ? AND workingdate < ? AND " & _
                                                      "(morningwork IN ('2', '3', '6') OR afternoonwork IN ('2', '3', '6'))"
                         Rs_worktbl_cmd.Prepared = true

@@ -47,7 +47,7 @@ Dim Rs_controltbl
 Dim Rs_controltbl_cmd
 Set Rs_controltbl_cmd = Server.CreateObject ("ADODB.Command")
 Rs_controltbl_cmd.ActiveConnection = MM_workdbms_STRING
-Rs_controltbl_cmd.CommandText = "SELECT COUNT(*) AS count FROM dbo.controltbl WHERE systemenable='1'"
+Rs_controltbl_cmd.CommandText = "SELECT COUNT(*) AS count FROM controltbl WHERE systemenable='1'"
 Rs_controltbl_cmd.Prepared = true
 Set Rs_controltbl = Rs_controltbl_cmd.Execute
 If Rs_controltbl.EOF Or Rs_controltbl.Fields.Item("count").Value <= 0 Then

@@ -53,7 +53,7 @@ Dim Rs_dutyrostertbl_cmd
 Dim Rs_dutyrostertbl_numRows
 Set Rs_dutyrostertbl_cmd = Server.CreateObject ("ADODB.Command")
 Rs_dutyrostertbl_cmd.ActiveConnection = MM_workdbms_STRING
-Rs_dutyrostertbl_cmd.CommandText = "SELECT * FROM dbo.dutyrostertbl WHERE personalcode = ? AND ymb = ? ORDER BY ymb DESC"
+Rs_dutyrostertbl_cmd.CommandText = "SELECT * FROM dutyrostertbl WHERE personalcode = ? AND ymb = ? ORDER BY ymb DESC"
 Rs_dutyrostertbl_cmd.Prepared = true
 Rs_dutyrostertbl_cmd.Parameters.Append Rs_dutyrostertbl_cmd.CreateParameter("param1", 200, 1, 5, target_personalcode)
 Rs_dutyrostertbl_cmd.Parameters.Append Rs_dutyrostertbl_cmd.CreateParameter("param2", 200, 1, 6, ymb)
@@ -78,7 +78,7 @@ Rs_dutyrostertbl.Close()
 ' 対象月前月データ読込み
 Set Rs_dutyrostertbl_cmd = Server.CreateObject ("ADODB.Command")
 Rs_dutyrostertbl_cmd.ActiveConnection = MM_workdbms_STRING
-Rs_dutyrostertbl_cmd.CommandText = "SELECT * FROM dbo.dutyrostertbl WHERE personalcode = ? AND ymb < ? ORDER BY ymb DESC"
+Rs_dutyrostertbl_cmd.CommandText = "SELECT * FROM dutyrostertbl WHERE personalcode = ? AND ymb < ? ORDER BY ymb DESC"
 Rs_dutyrostertbl_cmd.Prepared = true
 Rs_dutyrostertbl_cmd.Parameters.Append Rs_dutyrostertbl_cmd.CreateParameter("param1", 200, 1, 5, target_personalcode)
 Rs_dutyrostertbl_cmd.Parameters.Append Rs_dutyrostertbl_cmd.CreateParameter("param2", 200, 1, 6, ymb)
@@ -118,7 +118,7 @@ Set Rs_dutyrostertbl_cmd = Server.CreateObject ("ADODB.Command")
 Rs_dutyrostertbl_cmd.ActiveConnection = MM_workdbms_STRING
 Rs_dutyrostertbl_cmd.CommandText = "SELECT SUM(overtime + holidayshiftovertime + overtimelate + holidayshiftovertimelate + weekovertime) AS sumovertime " & _
                                    ",SUM(holidayshifttime + holidayshiftlate) AS sumholidaytime " & _
-                                   "FROM dbo.dutyrostertbl WHERE personalcode = ? AND ymb >= ? AND ymb < ?"
+                                   "FROM dutyrostertbl WHERE personalcode = ? AND ymb >= ? AND ymb < ?"
 Rs_dutyrostertbl_cmd.Prepared = true
 Rs_dutyrostertbl_cmd.Parameters.Append Rs_dutyrostertbl_cmd.CreateParameter("param1", 200, 1, 5, target_personalcode)
 Rs_dutyrostertbl_cmd.Parameters.Append Rs_dutyrostertbl_cmd.CreateParameter("param2", 200, 1, 6, businessYear)
@@ -242,7 +242,7 @@ Set Rs_dutyrostertbl = Nothing
 ' 当年度データの集計読込み(休出回数)当月含まず
 Set Rs_worktbl_cmd = Server.CreateObject ("ADODB.Command")
 Rs_worktbl_cmd.ActiveConnection = MM_workdbms_STRING
-Rs_worktbl_cmd.CommandText = "SELECT COUNT(*) AS holidaywork FROM dbo.worktbl " & _
+Rs_worktbl_cmd.CommandText = "SELECT COUNT(*) AS holidaywork FROM worktbl " & _
                              "WHERE personalcode = ? AND workingdate >= ? AND workingdate < ? AND " & _
                              "(morningwork IN ('2', '3', '6') OR afternoonwork IN ('2', '3', '6'))"
 Rs_worktbl_cmd.Prepared = true
@@ -264,7 +264,7 @@ Rs_worktbl.Close()
 ' 当月休出回数
 Set Rs_worktbl_cmd = Server.CreateObject ("ADODB.Command")
 Rs_worktbl_cmd.ActiveConnection = MM_workdbms_STRING
-Rs_worktbl_cmd.CommandText = "SELECT COUNT(*) AS holidaywork FROM dbo.worktbl " & _
+Rs_worktbl_cmd.CommandText = "SELECT COUNT(*) AS holidaywork FROM worktbl " & _
                              "WHERE personalcode = ? AND workingdate LIKE ? AND " & _
                              "(morningwork IN ('2', '3', '6') OR afternoonwork IN ('2', '3', '6'))"
 Rs_worktbl_cmd.Prepared = true
@@ -293,7 +293,7 @@ Dim Rs_worktbl_cmd
 Dim Rs_worktbl_numRows
 Set Rs_worktbl_cmd = Server.CreateObject ("ADODB.Command")
 Rs_worktbl_cmd.ActiveConnection = MM_workdbms_STRING
-Rs_worktbl_cmd.CommandText = "SELECT CONVERT(int,w1.updatetime) AS inttime, w1.id, w1.updatetime, w1.personalcode, w1.workingdate, w1.morningwork, " & _
+Rs_worktbl_cmd.CommandText = "SELECT CAST(w1.updatetime AS integer) AS inttime, w1.id, w1.updatetime, w1.personalcode, w1.workingdate, w1.morningwork, " & _
     "w1.afternoonwork, w1.morningholiday, w1.afternoonholiday, w1.summons, w1.overtime_begin, w1.overtime_end, " & _
     "w1.rest_begin, w1.rest_end, w1.overtime, w1.overtimelate, w1.holidayshift, w1.holidayshiftovertime, " & _
     "w1.holidayshiftlate, w1.holidayshiftovertimelate, w1.requesttime, w1.requesttime_begin, w1.requesttime_end, " & _
@@ -302,14 +302,14 @@ Rs_worktbl_cmd.CommandText = "SELECT CONVERT(int,w1.updatetime) AS inttime, w1.i
     "w1.work_begin, w1.work_end, w1.break_begin1, w1.break_end1, w1.break_begin2, w1.break_end2, w1.workmin, " & _
     "w2.nightduty AS nightduty2, w2.operator AS operator2, w3.cumulative_workmin, w3.overwork, " & _
     "w1.weekovertime " & _
-    "FROM dbo.worktbl w1 " & _
-    "LEFT JOIN dbo.worktbl w2 ON w1.personalcode = w2.personalcode AND CONVERT(NVARCHAR, DATEADD(day, -1, CONVERT(nvarchar, w1.workingdate, 112)), 112) = w2.workingdate " & _
+    "FROM worktbl w1 " & _
+    "LEFT JOIN worktbl w2 ON w1.personalcode = w2.personalcode AND to_char(w1.workingdate::date - INTERVAL '1 day', 'YYYYMMDD') = w2.workingdate " & _
     "LEFT JOIN (SELECT personalcode, workingdate, cumulative_workmin, " & _
     "CASE WHEN CEILING(cumulative_workmin / 60.0) > 40 THEN 'overwork' ELSE '' END AS overwork " & _
     "FROM (SELECT personalcode, workingdate, workmin, SUM(workmin) OVER (PARTITION BY personalcode, " & _
-    "FORMAT(DATEADD(day, 1-DATEPART(WEEKDAY, workingdate), workingdate), 'yyyyMMdd') ORDER BY workingdate ) AS cumulative_workmin " & _
+    "to_char(workingdate::date - (extract(DOW FROM workingdate) || ' days')::interval + INTERVAL '1 day', 'YYYYMMDD') ORDER BY workingdate ) AS cumulative_workmin " & _
     "FROM worktbl " & _
-    "WHERE personalcode = ? AND workingdate BETWEEN FORMAT(DATEADD(day, -1*DATEPART(WEEKDAY, ?)+1, ?), 'yyyyMMdd') AND ?) r " & _
+    "WHERE personalcode = ? AND workingdate BETWEEN to_char(?::date - (extract(DOW FROM ?::date) || ' days')::interval + INTERVAL '1 day', 'YYYYMMDD') AND ?) r " & _
     "WHERE workingdate >= ? " & _
     ") w3 ON w1.personalcode = w3.personalcode AND w1.workingdate=w3.workingdate " & _
     "WHERE w1.personalcode = ? AND w1.workingdate LIKE ? ORDER BY w1.workingdate ASC"
@@ -329,7 +329,7 @@ Rs_worktbl_numRows = 0
 ' -----------------------------------------------------------------------------
 Set Rs_timetbl_cmd = Server.CreateObject ("ADODB.Command")
 Rs_timetbl_cmd.ActiveConnection = MM_workdbms_STRING
-Rs_timetbl_cmd.CommandText = "SELECT * FROM dbo.timetbl WHERE personalcode = ? AND workingdate LIKE ? ORDER BY workingdate ASC"
+Rs_timetbl_cmd.CommandText = "SELECT * FROM timetbl WHERE personalcode = ? AND workingdate LIKE ? ORDER BY workingdate ASC"
 Rs_timetbl_cmd.Prepared = true
 Rs_timetbl_cmd.Parameters.Append Rs_timetbl_cmd.CreateParameter("param1", 200, 1, 5, target_personalcode)
 Rs_timetbl_cmd.Parameters.Append Rs_timetbl_cmd.CreateParameter("param2", 200, 1, 7, ymb & "%")
@@ -341,7 +341,7 @@ Rs_timetbl_numRows = 0
 ' -----------------------------------------------------------------------------
 Set Rs_holidaytbl_cmd = Server.CreateObject ("ADODB.Command")
 Rs_holidaytbl_cmd.ActiveConnection = MM_workdbms_STRING
-Rs_holidaytbl_cmd.CommandText = "SELECT * FROM dbo.holidaytbl " & "WHERE holidaydate LIKE ? AND holidaytype = ? ORDER BY holidaydate ASC"
+Rs_holidaytbl_cmd.CommandText = "SELECT * FROM holidaytbl " & "WHERE holidaydate LIKE ? AND holidaytype = ? ORDER BY holidaydate ASC"
 Rs_holidaytbl_cmd.Prepared = true
 Rs_holidaytbl_cmd.Parameters.Append Rs_holidaytbl_cmd.CreateParameter("param1", 200, 1, 7, ymb & "%")
 Rs_holidaytbl_cmd.Parameters.Append Rs_holidaytbl_cmd.CreateParameter("param2", 200, 1, 1, holidaytype)
@@ -353,8 +353,8 @@ Rs_holidaytbl_numRows = 0
 ' -----------------------------------------------------------------------------
 Set Rs_remainvacationtbl_cmd = Server.CreateObject ("ADODB.Command")
 Rs_remainvacationtbl_cmd.ActiveConnection = MM_workdbms_STRING
-Rs_remainvacationtbl_cmd.CommandText = "SELECT r.personalcode, IsNULL(r.remainvacation, 0) AS remainvacation, " & _
-        "IsNULL(SUM(p.preservevacations), 0) AS preservevacations FROM " & _
+Rs_remainvacationtbl_cmd.CommandText = "SELECT r.personalcode, COALESCE(r.remainvacation, 0) AS remainvacation, " & _
+        "COALESCE(SUM(p.preservevacations), 0) AS preservevacations FROM " & _
         "(SELECT * FROM (" & _
         " SELECT personalcode, ymb, remainvacation, ROW_NUMBER() OVER (ORDER BY ymb DESC) AS rownum FROM remainvacationtbl " & _
         "WHERE personalcode= ? AND ymb <= ? " & _
@@ -476,7 +476,7 @@ Dim Rs_baseworktimetbl_cmd
 Dim Rs_baseworktimetbl_numRows
 Set Rs_baseworktimetbl_cmd = Server.CreateObject ("ADODB.Command")
 Rs_baseworktimetbl_cmd.ActiveConnection = MM_workdbms_STRING
-Rs_baseworktimetbl_cmd.CommandText = "SELECT * FROM dbo.baseworktimetbl WHERE personalcode IN ('00000', ?) AND ymb = ? ORDER BY personalcode DESC"
+Rs_baseworktimetbl_cmd.CommandText = "SELECT * FROM baseworktimetbl WHERE personalcode IN ('00000', ?) AND ymb = ? ORDER BY personalcode DESC"
 Rs_baseworktimetbl_cmd.Prepared = true
 Rs_baseworktimetbl_cmd.Parameters.Append Rs_baseworktimetbl_cmd.CreateParameter("param1", 200, 1, 5, target_personalcode)
 Rs_baseworktimetbl_cmd.Parameters.Append Rs_baseworktimetbl_cmd.CreateParameter("param2", 200, 1, 6, ymb)

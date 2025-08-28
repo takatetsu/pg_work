@@ -60,14 +60,14 @@ Dim Rs_counttbl_numRows
 Set Rs_counttbl_cmd = Server.CreateObject ("ADODB.Command")
 Rs_counttbl_cmd.ActiveConnection = MM_workdbms_STRING
 Rs_counttbl_cmd.CommandText = "SELECT COALESCE(SUM(count),0) AS count FROM " & _
-    "(SELECT orgcode FROM dbo.orgtbl WHERE personalcode='" & Session("MM_Username") & _
+    "(SELECT orgcode FROM orgtbl WHERE personalcode='" & Session("MM_Username") & _
     "' AND manageclass='1') ORG " & _
     "LEFT JOIN " & _
-    "(SELECT personalcode, gradecode, orgcode FROM dbo.stafftbl " & _
+    "(SELECT personalcode, gradecode, orgcode FROM stafftbl " & _
     "WHERE is_enable='1' AND gradecode<'033' And gradecode != '000') STAFF " & _
     "ON ORG.orgcode=STAFF.orgcode " & _
     "LEFT JOIN " & _
-    "(SELECT personalcode AS pcode, COUNT(*) AS count FROM dbo.worktbl " & _
+    "(SELECT personalcode AS pcode, COUNT(*) AS count FROM worktbl " & _
     "WHERE workingdate LIKE '" & dispYear & dispMonth & "%' AND is_approval = '0' " & _
     "group by personalcode) APPROVAL " & _
     "ON STAFF.personalcode=APPROVAL.pcode"
@@ -224,7 +224,7 @@ If (CStr(Request("MM_update")) = "form1") Then
             ' stafftbl の締め日付を更新
             Set MM_editCmd = Server.CreateObject ("ADODB.Command")
             MM_editCmd.ActiveConnection = MM_workdbms_STRING
-            MM_editCmd.CommandText = "UPDATE dbo.stafftbl SET processed_ymb = '" & _
+            MM_editCmd.CommandText = "UPDATE stafftbl SET processed_ymb = '" & _
                                         dispYear & dispMonth & _
                                         "' WHERE personalcode = '" & personalcode & "'"
             MM_editCmd.Prepared = true
@@ -238,7 +238,7 @@ If (CStr(Request("MM_update")) = "form1") Then
                 Set MM_editCmd = Server.CreateObject ("ADODB.Command")
                 MM_editCmd.ActiveConnection = MM_workdbms_STRING
 
-                MM_editCmd.CommandText = "INSERT INTO dbo.dutyrostertbl VALUES(DEFAULT, " & _
+                MM_editCmd.CommandText = "INSERT INTO dutyrostertbl VALUES(DEFAULT, " & _
                                         "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " & _
                                         "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " & _
                                         "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
@@ -307,7 +307,7 @@ If (CStr(Request("MM_update")) = "form1") Then
                 Set MM_editCmd = Server.CreateObject ("ADODB.Command")
                 MM_editCmd.ActiveConnection = MM_workdbms_STRING
 
-                MM_editCmd.CommandText = "UPDATE dbo.dutyrostertbl SET "   & _
+                MM_editCmd.CommandText = "UPDATE dutyrostertbl SET "   & _
                                          "personalcode              = ?, " & _
                                          "ymb                       = ?, " & _
                                          "workdays                  = ?, " & _
@@ -419,18 +419,18 @@ Dim Rs_worktbl_numRows
 Set Rs_worktbl_cmd = Server.CreateObject ("ADODB.Command")
 Rs_worktbl_cmd.ActiveConnection = MM_workdbms_STRING
 Rs_worktbl_cmd.CommandText = "SELECT * FROM "                                           & _
-    "(SELECT orgcode FROM dbo.orgtbl "                                                  & _
+    "(SELECT orgcode FROM orgtbl "                                                  & _
     "WHERE personalcode='" & Session("MM_Username") & "' AND manageclass='1') ORG "     & _
     "LEFT JOIN "                                                                        & _
     "(SELECT personalcode AS pcode, staffname, orgcode AS org, gradecode AS grade "     & _
-    "FROM dbo.stafftbl "                                                                & _
+    "FROM stafftbl "                                                                & _
     "WHERE is_enable='1') STAFF "                                                       & _
     "ON ORG.orgcode=STAFF.org "                                                         & _
     "LEFT JOIN "                                                                        & _
-    "(SELECT * FROM dbo.dutyrostertbl WHERE ymb='" & dispYear & dispMonth & "') DUTY "  & _
+    "(SELECT * FROM dutyrostertbl WHERE ymb='" & dispYear & dispMonth & "') DUTY "  & _
     "ON STAFF.pcode=DUTY.personalcode "                                                 & _
     "LEFT JOIN "                                                                        & _
-    "(SELECT personalcode AS countpcode, COUNT(*) AS count FROM dbo.worktbl "           & _
+    "(SELECT personalcode AS countpcode, COUNT(*) AS count FROM worktbl "           & _
     "WHERE workingdate LIKE '" & dispYear & dispMonth & "%' AND "                       & _
     "is_approval = '1' group by personalcode) APPROVAL "                                & _
     "ON STAFF.pcode=APPROVAL.countpcode "                                               & _
@@ -1762,7 +1762,7 @@ Sub setData()
     Dim Rs_lastmonth_dutyrostertbl_numRows
     Set Rs_lastmonth_dutyrostertbl_cmd = Server.CreateObject ("ADODB.Command")
     Rs_lastmonth_dutyrostertbl_cmd.ActiveConnection = MM_workdbms_STRING
-    Rs_lastmonth_dutyrostertbl_cmd.CommandText = "SELECT * FROM dbo.dutyrostertbl WHERE personalcode = ? AND ymb = ?"
+    Rs_lastmonth_dutyrostertbl_cmd.CommandText = "SELECT * FROM dutyrostertbl WHERE personalcode = ? AND ymb = ?"
     Rs_lastmonth_dutyrostertbl_cmd.Prepared = true
     Rs_lastmonth_dutyrostertbl_cmd.Parameters.Append Rs_lastmonth_dutyrostertbl_cmd.CreateParameter("param1", 200, 1, 5, personalcode)
     Rs_lastmonth_dutyrostertbl_cmd.Parameters.Append Rs_lastmonth_dutyrostertbl_cmd.CreateParameter("param2", 200, 1, 7, lastYmb)

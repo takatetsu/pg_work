@@ -101,7 +101,7 @@ If Request.Form("i_deduction") = "i_deduction" Then
                 ' -------------------------------------------------------------
                 ' データ登録処理 INSERT
                 ' -------------------------------------------------------------
-                MM_Dedu_SQL = "INSERT INTO dbo.deductiontbl(personalcode, ymb, amount01, amount02, amount03, amount04, amount05, amount06, amount07, amount08, amount09, amount10, amount08ncr, amount09ncr, amount10ncr) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                MM_Dedu_SQL = "INSERT INTO deductiontbl(personalcode, ymb, amount01, amount02, amount03, amount04, amount05, amount06, amount07, amount08, amount09, amount10, amount08ncr, amount09ncr, amount10ncr) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                 Set MM_Dedu_cmd = Server.CreateObject ("ADODB.Command")
                 MM_Dedu_cmd.ActiveConnection = MM_workdbms_STRING
                 MM_Dedu_cmd.CommandText = MM_Dedu_SQL
@@ -126,7 +126,7 @@ If Request.Form("i_deduction") = "i_deduction" Then
                 ' -------------------------------------------------------------
                 ' データ更新処理 UPDATE
                 ' -------------------------------------------------------------
-                MM_Dedu_SQL = "UPDATE dbo.deductiontbl SET amount01 = ?, amount02 = ?, amount03 = ?, amount04 = ?, amount05 = ?, amount06 = ?, amount07 = ?, amount08 = ?, amount09 = ?, amount10 = ?, amount08ncr = ?, amount09ncr = ?, amount10ncr = ? WHERE personalcode = ? AND ymb = ?"
+                MM_Dedu_SQL = "UPDATE deductiontbl SET amount01 = ?, amount02 = ?, amount03 = ?, amount04 = ?, amount05 = ?, amount06 = ?, amount07 = ?, amount08 = ?, amount09 = ?, amount10 = ?, amount08ncr = ?, amount09ncr = ?, amount10ncr = ? WHERE personalcode = ? AND ymb = ?"
                 Set MM_Dedu_cmd = Server.CreateObject ("ADODB.Command")
                 MM_Dedu_cmd.ActiveConnection = MM_workdbms_STRING
                 MM_Dedu_cmd.CommandText = MM_Dedu_SQL

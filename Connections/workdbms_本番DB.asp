@@ -6,5 +6,5 @@
 ' Catalog=""
 ' Schema=""
 Dim MM_workdbms_STRING
-MM_workdbms_STRING = "dsn=sg_work;uid=sg;pwd=kouka08;"
+MM_workdbms_STRING = "Driver={PostgreSQL ODBC Driver};Server=localhost;Port=5432;Database=prod_workdb;Uid=sg;Pwd=kouka08;"
 %>

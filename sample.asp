@@ -7,7 +7,7 @@ Dim Rs_staff_numRows
 
 Set Rs_staff_cmd = Server.CreateObject ("ADODB.Command")
 Rs_staff_cmd.ActiveConnection = MM_workdbms_STRING
-Rs_staff_cmd.CommandText = "SELECT * FROM dbo.stafftbl ORDER BY id ASC" 
+Rs_staff_cmd.CommandText = "SELECT * FROM stafftbl ORDER BY id ASC" 
 Rs_staff_cmd.Prepared = true
 
 Set Rs_staff = Rs_staff_cmd.Execute

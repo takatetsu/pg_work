@@ -37,14 +37,14 @@ If MM_valUsername <> "" Then
     MM_redirectLoginSuccess = "inputwork.asp"
     MM_redirectLoginFailed = "index.asp"
 
-    MM_loginSQL = "SELECT personalcode, staffname, dbo.stafftbl.orgcode, is_operator, is_input, " & _
+    MM_loginSQL = "SELECT personalcode, staffname, stafftbl.orgcode, is_operator, is_input, " & _
                     "is_deduction, is_charge, is_superior, orgname, password, opentime, " & _
                     "closetime, is_unionexecutive, workshift, old_workshift, old_workshift_last_ymb"
     If MM_fldUserAuthorization <> "" Then MM_loginSQL = MM_loginSQL & "," & MM_fldUserAuthorization
-    MM_loginSQL = MM_loginSQL & " FROM dbo.stafftbl LEFT JOIN dbo.orgnametbl ON " & _
-                                "dbo.stafftbl.orgcode=dbo.orgnametbl.orgcode " & _
-                                "WHERE dbo.stafftbl.personalcode = ? AND " & _
-                                "dbo.stafftbl.password = hashbytes('sha1', ?) AND is_enable = '1'"
+    MM_loginSQL = MM_loginSQL & " FROM stafftbl LEFT JOIN orgnametbl ON " & _
+                                "stafftbl.orgcode=orgnametbl.orgcode " & _
+                                "WHERE stafftbl.personalcode = ? AND " & _
+                                "stafftbl.password = digest(?, 'sha1') AND is_enable = '1'"
     Set MM_rsUser_cmd = Server.CreateObject ("ADODB.Command")
     MM_rsUser_cmd.ActiveConnection = MM_workdbms_STRING
     MM_rsUser_cmd.CommandText = MM_loginSQL

@@ -7,7 +7,7 @@ Dim Rs_worktbl_sum
 Dim Rs_worktbl_sum_cmd
 Set Rs_worktbl_sum_cmd = Server.CreateObject ("ADODB.Command")
 Rs_worktbl_sum_cmd.ActiveConnection = MM_workdbms_STRING
-Rs_worktbl_sum_cmd.CommandText = "SELECT * FROM dbo.worktbl " & _
+Rs_worktbl_sum_cmd.CommandText = "SELECT * FROM worktbl " & _
     "WHERE personalcode = ? AND workingdate LIKE ? ORDER BY workingdate ASC"
 Rs_worktbl_sum_cmd.Prepared = true
 Rs_worktbl_sum_cmd.Parameters.Append Rs_worktbl_sum_cmd.CreateParameter _
@@ -458,7 +458,7 @@ If (Request.Form("dutyrostertbl_id") = "") Then
     ' INSERT
     Set MM_editCmd = Server.CreateObject ("ADODB.Command")
     MM_editCmd.ActiveConnection = MM_workdbms_STRING
-    MM_editCmd.CommandText = "INSERT INTO dbo.dutyrostertbl VALUES(DEFAULT, " & _
+    MM_editCmd.CommandText = "INSERT INTO dutyrostertbl VALUES(DEFAULT, " & _
                              "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " & _
                              "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " & _
                              "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
@@ -558,7 +558,7 @@ Else
     ' UPDATE
     Set MM_editCmd = Server.CreateObject ("ADODB.Command")
     MM_editCmd.ActiveConnection = MM_workdbms_STRING
-    MM_editCmd.CommandText = "UPDATE dbo.dutyrostertbl SET "       & _
+    MM_editCmd.CommandText = "UPDATE dutyrostertbl SET "       & _
                                 "workdays                   = ?, " & _
                                 "workholidays               = ?, " & _
                                 "absencedays                = ?, " & _

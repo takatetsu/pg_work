@@ -104,7 +104,7 @@ If (errorMsg = "") Then
                     ' INSERT
                     Set MM_editCmd = Server.CreateObject ("ADODB.Command")
                     MM_editCmd.ActiveConnection = MM_workdbms_STRING
-                    MM_editCmd.CommandText = "INSERT INTO dbo.timetbl VALUES" & _
+                    MM_editCmd.CommandText = "INSERT INTO timetbl VALUES" & _
                                              "(DEFAULT, ?, ?, '', ?, '', '', '', '', '', ?)"
                     MM_editCmd.Prepared = true
                     MM_editCmd.Parameters.Append MM_editCmd.CreateParameter(,201,,  5, target_personalcode)
@@ -123,7 +123,7 @@ If (errorMsg = "") Then
                 ' UPDATE
                 Set MM_editCmd = Server.CreateObject ("ADODB.Command")
                 MM_editCmd.ActiveConnection = MM_workdbms_STRING
-                MM_editCmd.CommandText = "UPDATE dbo.timetbl SET cometime  = ?, " & _
+                MM_editCmd.CommandText = "UPDATE timetbl SET cometime  = ?, " & _
                                                                 "leavetime = ?  " & _
                                                                 "WHERE id  = ?"
                 MM_editCmd.Prepared = true
@@ -148,9 +148,9 @@ If (errorMsg = "") Then
                 Set MM_editCmd = Server.CreateObject ("ADODB.Command")
                 MM_editCmd.ActiveConnection = MM_workdbms_STRING
                 ' UPDATE
-                MM_editCmd.CommandText = "UPDATE dbo.worktbl SET is_approval = ? " & _
+                MM_editCmd.CommandText = "UPDATE worktbl SET is_approval = ? " & _
                                          ", is_error = ? , memo = ? " & _
-                                         "WHERE id = ? AND CONVERT(int,updatetime) = ?"
+                                         "WHERE id = ? AND CAST(updatetime AS integer) = ?"
                 MM_editCmd.Prepared = true
                 If (Request.Form("is_approval" & Request.Form("approval_ymd")(i))="on") Then
                     MM_editCmd.Parameters.Append MM_editCmd.CreateParameter(,201,, 1, "1")

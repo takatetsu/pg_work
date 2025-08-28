@@ -66,14 +66,14 @@ Dim Rs_worktbl_numRows
 Set Rs_worktbl_cmd = Server.CreateObject ("ADODB.Command")
 Rs_worktbl_cmd.ActiveConnection = MM_workdbms_STRING
 Rs_worktbl_cmd.CommandText = "SELECT * FROM "                                           & _
-    "(SELECT orgcode FROM dbo.orgtbl "                                                  & _
+    "(SELECT orgcode FROM orgtbl "                                                  & _
     "WHERE personalcode='" & Session("MM_Username") & "' AND manageclass='1') ORG "     & _
     "LEFT JOIN "                                                                        & _
-    "(SELECT personalcode AS pcode, staffname, orgcode AS org, gradecode AS grade FROM dbo.stafftbl "       & _
+    "(SELECT personalcode AS pcode, staffname, orgcode AS org, gradecode AS grade FROM stafftbl "       & _
     "WHERE is_enable='1') STAFF "                                                       & _
     "ON ORG.orgcode=STAFF.org "                                                         & _
     "LEFT JOIN "                                                                        & _
-    "(SELECT * FROM dbo.dutyrostertbl WHERE ymb='" & dispYear & dispMonth & "') DUTY "  & _
+    "(SELECT * FROM dutyrostertbl WHERE ymb='" & dispYear & dispMonth & "') DUTY "  & _
     "ON STAFF.pcode=DUTY.personalcode "                                                 & _
     "WHERE pcode IS NOT NULL "                                                          & _
     "ORDER BY org, grade DESC, STAFF.pcode ASC"

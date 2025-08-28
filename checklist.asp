@@ -85,8 +85,8 @@ Rs_work_cmd.CommandText = "SELECT worktbl.personalcode " & _
     "FROM stafftbl " & _
     "RIGHT OUTER JOIN worktbl ON stafftbl.personalcode = worktbl.personalcode " & _
     "LEFT OUTER JOIN orgtbl ON orgtbl.orgcode = stafftbl.orgcode " & _
-    "WHERE worktbl.workingdate LIKE ? AND dbo.stafftbl.is_input = '1' " & _
-    "AND dbo.stafftbl.is_enable = '1' AND orgtbl.manageclass = '2' " & _
+    "WHERE worktbl.workingdate LIKE ? AND stafftbl.is_input = '1' " & _
+    "AND stafftbl.is_enable = '1' AND orgtbl.manageclass = '2' " & _
     "AND orgtbl.personalcode = ? " & _
     "ORDER BY stafftbl.orgcode, stafftbl.gradecode DESC, worktbl.personalcode, worktbl.workingdate"
 Rs_work_cmd.Prepared = true
@@ -162,7 +162,7 @@ Set Rs_work = Rs_work_cmd.Execute
                         Dim Rs_dutyrostertbl_numRows
                         Set Rs_dutyrostertbl_cmd = Server.CreateObject ("ADODB.Command")
                         Rs_dutyrostertbl_cmd.ActiveConnection = MM_workdbms_STRING
-                        Rs_dutyrostertbl_cmd.CommandText = "SELECT * FROM dbo.dutyrostertbl " & _
+                        Rs_dutyrostertbl_cmd.CommandText = "SELECT * FROM dutyrostertbl " & _
                             "WHERE personalcode = ? AND ymb <= ? ORDER BY ymb DESC"
                         Rs_dutyrostertbl_cmd.Prepared = true
                         Rs_dutyrostertbl_cmd.Parameters.Append Rs_dutyrostertbl_cmd.CreateParameter("param1", 200, 1, 5, Trim(Rs_staff.Fields.Item("personalcode").Value))

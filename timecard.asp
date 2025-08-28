@@ -30,10 +30,10 @@ If (Request.QueryString("p")<>"" And (Session("MM_is_superior")="1" Or Session("
 
     Set Rs_managetbl_cmd = Server.CreateObject ("ADODB.Command")
     Rs_managetbl_cmd.ActiveConnection = MM_workdbms_STRING
-    Rs_managetbl_cmd.CommandText = "SELECT dbo.orgtbl.manageclass FROM dbo.orgtbl " & _
-        "INNER JOIN dbo.stafftbl ON dbo.orgtbl.orgcode=dbo.stafftbl.orgcode "       & _
-        "WHERE dbo.orgtbl.personalcode=? AND dbo.stafftbl.personalcode=? AND "      & _
-        "dbo.stafftbl.is_enable='1'"
+    Rs_managetbl_cmd.CommandText = "SELECT orgtbl.manageclass FROM orgtbl " & _
+        "INNER JOIN stafftbl ON orgtbl.orgcode=stafftbl.orgcode "       & _
+        "WHERE orgtbl.personalcode=? AND stafftbl.personalcode=? AND "      & _
+        "stafftbl.is_enable='1'"
     Rs_managetbl_cmd.Prepared = true
     Rs_managetbl_cmd.Parameters.Append Rs_managetbl_cmd.CreateParameter(_
         "param1", 200, 1, 5, Session("MM_Username"))
@@ -69,11 +69,11 @@ Dim Rs_stafftbl_numRows
 Set Rs_stafftbl_cmd = Server.CreateObject ("ADODB.Command")
 Rs_stafftbl_cmd.ActiveConnection = MM_workdbms_STRING
 Rs_stafftbl_cmd.CommandText = "SELECT personalcode, staffname, " & _
-    "dbo.stafftbl.orgcode AS orgcode, is_operator, is_input, is_charge, " & _
+    "stafftbl.orgcode AS orgcode, is_operator, is_input, is_charge, " & _
     "is_superior, orgname, processed_ymb, holidaytype " & _
-    "FROM dbo.stafftbl LEFT JOIN dbo.orgnametbl " & _
-    "ON dbo.stafftbl.orgcode=dbo.orgnametbl.orgcode " & _
-    "WHERE dbo.stafftbl.personalcode = ?"
+    "FROM stafftbl LEFT JOIN orgnametbl " & _
+    "ON stafftbl.orgcode=orgnametbl.orgcode " & _
+    "WHERE stafftbl.personalcode = ?"
 Rs_stafftbl_cmd.Prepared = true
 Rs_stafftbl_cmd.Parameters.Append Rs_stafftbl_cmd.CreateParameter(_
     "param1", 200, 1, 5, personalcode)
@@ -96,7 +96,7 @@ Set Rs_stafftbl = Nothing
 ' -----------------------------------------------------------------------------
 Set Rs_tctbl_cmd = Server.CreateObject ("ADODB.Command")
 Rs_tctbl_cmd.ActiveConnection = MM_workdbms_STRING
-Rs_tctbl_cmd.CommandText = "SELECT * FROM dbo.timecardtbl " & _
+Rs_tctbl_cmd.CommandText = "SELECT * FROM timecardtbl " & _
     "WHERE personalcode = ? AND punchdate LIKE ? " & _
     "ORDER BY punchdate, punchtime ASC"
 Rs_tctbl_cmd.Prepared = true
