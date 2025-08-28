@@ -20,16 +20,14 @@ If (CStr(Request.Form("button_type")) = "in"   ) Or (CStr(Request.Form("button_t
         ' INSERT
         Set MM_editCmd = Server.CreateObject ("ADODB.Command")
         MM_editCmd.ActiveConnection = MM_workdbms_STRING
-        MM_editCmd.CommandText = "INSERT INTO timetbl VALUES(DEFAULT, ?, ?, '', ?, '', '', '', '', '', ?)"
+        MM_editCmd.CommandText = "INSERT INTO timetbl (personalcode, workingdate, cometime, leavetime, updatetime) VALUES (?, ?, ?, '', NOW())"
         MM_editCmd.Prepared = true
         MM_editCmd.Parameters.Append MM_editCmd.CreateParameter(,201,,  5, Session("MM_Username"))
         MM_editCmd.Parameters.Append MM_editCmd.CreateParameter(,201,,  8, today)
         If (CStr(Request.Form("button_type")) = "in" ) Then
-            MM_editCmd.Parameters.Append MM_editCmd.CreateParameter(,201,,  4, nowTime)
-            MM_editCmd.Parameters.Append MM_editCmd.CreateParameter(,201,,  4, "")
+            MM_editCmd.Parameters.Append MM_editCmd.CreateParameter(,201,,  4, CStr(nowTime))
         Else
             MM_editCmd.Parameters.Append MM_editCmd.CreateParameter(,201,,  4, "")
-            MM_editCmd.Parameters.Append MM_editCmd.CreateParameter(,201,,  4, nowTime)
         End If
         MM_editCmd.Execute
         MM_editCmd.ActiveConnection.Close

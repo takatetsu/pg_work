@@ -62,14 +62,14 @@ Rs_staff_cmd.CommandText = "SELECT s.personalcode ,s.staffname " & _
     "UNION " & _
     "SELECT s.personalcode ,s.staffname ,s.orgcode " & _
     ",s.gradecode ,s.workshift ,s.is_operator " & _
-    "FROM stafftbl o RIGHT OUTER JOIN stafftbl s " & _
+    "FROM stafftbl s LEFT OUTER JOIN stafftbl o " & _
     "ON o.orgcode = s.orgcode " & _
     "WHERE s.is_input = '1' AND s.is_enable = '1' " & _
     "AND o.personalcode = ? " & _
-    "ORDER BY s.orgcode, s.gradecode DESC, s.personalcode"
+    "ORDER BY orgcode, gradecode DESC, personalcode"
 Rs_staff_cmd.Prepared = true
 Rs_staff_cmd.Parameters.Append Rs_staff_cmd.CreateParameter("param1", 200, 1, -1, Session("MM_Username") )
-Rs_staff_cmd.Parameters.Append Rs_staff_cmd.CreateParameter("param1", 200, 1, -1, Session("MM_Username") )
+Rs_staff_cmd.Parameters.Append Rs_staff_cmd.CreateParameter("param2", 200, 1, -1, Session("MM_Username") )
 Set Rs_staff = Rs_staff_cmd.Execute
 
 ' worktblより、表示スタッフ全員分の上長チェックを日付順に取得

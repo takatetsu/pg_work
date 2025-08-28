@@ -150,7 +150,7 @@ If (errorMsg = "") Then
                 ' UPDATE
                 MM_editCmd.CommandText = "UPDATE worktbl SET is_approval = ? " & _
                                          ", is_error = ? , memo = ? " & _
-                                         "WHERE id = ? AND CAST(updatetime AS integer) = ?"
+                                         "WHERE id = ? AND EXTRACT(EPOCH FROM updatetime)::integer = ?"
                 MM_editCmd.Prepared = true
                 If (Request.Form("is_approval" & Request.Form("approval_ymd")(i))="on") Then
                     MM_editCmd.Parameters.Append MM_editCmd.CreateParameter(,201,, 1, "1")

@@ -46,7 +46,7 @@ If Request.Form("c_password") = "c_password" Then
     Dim MM_cPass
     MM_updateSuccess = "index.asp"
 
-    MM_updateSQL = MM_updateSQL & " UPDATE stafftbl SET stafftbl.password = digest(?, 'sha1') WHERE stafftbl.personalcode = ? "
+    MM_updateSQL = " UPDATE stafftbl SET password = encode(digest(?, 'sha1'), 'hex') WHERE personalcode = ? "
     Set MM_cPass_cmd = Server.CreateObject ("ADODB.Command")
     MM_cPass_cmd.ActiveConnection = MM_workdbms_STRING
     MM_cPass_cmd.CommandText = MM_updateSQL

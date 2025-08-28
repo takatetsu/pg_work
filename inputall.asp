@@ -76,7 +76,7 @@ Rs_counttbl_cmd.Prepared = true
 Set Rs_counttbl = Rs_counttbl_cmd.Execute
 Rs_counttbl_numRows = 0
 If Not Rs_counttbl.EOF Or Not Rs_counttbl.BOF Then
-    If Rs_counttbl.Fields.Item("count").Value > 0 Then
+    If CLng(Rs_counttbl.Fields.Item("count").Value) > 0 Then
         inputDisable = "Disabled"
     End If
 End If
@@ -535,7 +535,7 @@ Rs_worktbl_numRows = 0
                                 If (IsNull(Rs_worktbl.Fields.Item("count").Value)) Then
                                     approval     = "×"
                                 Else
-                                    If (lastDay - Rs_worktbl.Fields.Item("count").Value = 0) Then
+                                    If (lastDay - CLng(Rs_worktbl.Fields.Item("count").Value) = 0) Then
                                         approval = "○"
                                     Else
                                         approval = "×"

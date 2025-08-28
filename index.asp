@@ -44,7 +44,7 @@ If MM_valUsername <> "" Then
     MM_loginSQL = MM_loginSQL & " FROM stafftbl LEFT JOIN orgnametbl ON " & _
                                 "stafftbl.orgcode=orgnametbl.orgcode " & _
                                 "WHERE stafftbl.personalcode = ? AND " & _
-                                "stafftbl.password = digest(?, 'sha1') AND is_enable = '1'"
+                                "stafftbl.password = encode(digest(?, 'sha1'), 'hex') AND is_enable = '1'"
     Set MM_rsUser_cmd = Server.CreateObject ("ADODB.Command")
     MM_rsUser_cmd.ActiveConnection = MM_workdbms_STRING
     MM_rsUser_cmd.CommandText = MM_loginSQL

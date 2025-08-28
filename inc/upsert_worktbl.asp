@@ -397,7 +397,7 @@ Else
              "workmin                  = ?," & _
              "weekovertime             = ? " & _
              "WHERE id                 = ? " & _
-             "AND CAST(updatetime AS integer) = ?"
+             "AND EXTRACT(EPOCH FROM updatetime)::integer = ?"
     MM_editCmd.Prepared = true
     MM_editCmd.Parameters.Append MM_editCmd.CreateParameter(,201,,1, wk_morningwork)
     MM_editCmd.Parameters.Append MM_editCmd.CreateParameter(,201,,1, wk_afternoonwork)

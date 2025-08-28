@@ -119,14 +119,14 @@ If workshift = "9" And errorMsg = "" Then
         "CASE w2.morningholiday WHEN 'A' THEN 1 ELSE 0 END AS holiday, old_workshift_last_ymb FROM " & _
         "(SELECT worktbl.personalcode, worktbl.workingdate, worktbl.morningholiday, " & _
         "stafftbl.old_workshift_last_ymb, " & _
-        "to_char(worktbl.workingdate::date - (extract(DOW FROM worktbl.workingdate) || ' days')::interval + INTERVAL '1 day', 'YYYYMMDD') AS begindate, " & _
-        "to_char(worktbl.workingdate::date + (7 - extract(DOW FROM worktbl.workingdate) || ' days')::interval, 'YYYYMMDD') AS enddate " & _
+        "to_char(to_date(worktbl.workingdate, 'YYYYMMDD') - (extract(DOW FROM to_date(worktbl.workingdate, 'YYYYMMDD'))::text || ' days')::interval + INTERVAL '1 day', 'YYYYMMDD') AS begindate, " & _
+        "to_char(to_date(worktbl.workingdate, 'YYYYMMDD') + ((7 - extract(DOW FROM to_date(worktbl.workingdate, 'YYYYMMDD')))::text || ' days')::interval, 'YYYYMMDD') AS enddate " & _
         "FROM worktbl LEFT JOIN stafftbl ON worktbl.personalcode = stafftbl.personalcode " & _
         "WHERE worktbl.personalcode = ? AND (worktbl.workingdate BETWEEN ? AND ? OR " & _
-        "?::date - (extract(DOW FROM ?::date) || ' days')::interval <= worktbl.workingdate AND " & _
-        "worktbl.workingdate < ?) AND worktbl.workingdate >= stafftbl.old_workshift_last_ymb) w " & _
+        "to_date(?, 'YYYYMMDD') - (extract(DOW FROM to_date(?, 'YYYYMMDD'))::text || ' days')::interval <= to_date(worktbl.workingdate, 'YYYYMMDD') AND " & _
+        "to_date(worktbl.workingdate, 'YYYYMMDD') < to_date(?, 'YYYYMMDD')) AND worktbl.workingdate >= stafftbl.old_workshift_last_ymb) w " & _
         "LEFT JOIN worktbl w2 ON w.personalcode=w2.personalcode AND w.begindate <= w2.workingdate AND " & _
-        "w.enddate >= w2.workingdate) x where begindate > old_workshift_last_ymb + '31') y  GROUP BY begindate, enddate HAVING COUNT(*) = 7 AND SUM(holiday) <> 1"
+        "w.enddate >= w2.workingdate) x where begindate > old_workshift_last_ymb || '31') y  GROUP BY begindate, enddate HAVING COUNT(*) = 7 AND SUM(holiday) <> 1"
     Rs_statutory_cmd.Prepared = true
     Rs_statutory_cmd.Parameters.Append Rs_statutory_cmd.CreateParameter("param1", 200, 1, 5, target_personalcode)
     Rs_statutory_cmd.Parameters.Append Rs_statutory_cmd.CreateParameter("param2", 200, 1, 8, ymb & "01")

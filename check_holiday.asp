@@ -295,7 +295,7 @@ Set Rs_work = Rs_work_cmd.Execute
                         ' 午後有休集計
                         Set Rs_worktbl_cmd = Server.CreateObject ("ADODB.Command")
                         Rs_worktbl_cmd.ActiveConnection = MM_workdbms_STRING
-                        Rs_worktbl_cmd.CommandText = "SELECT COUNT(afternoonholiday) AS holiday FROM worktbl " & _
+                        Rs_worktbl_cmd.CommandText = "SELECT COUNT(afternoonholiday)::integer AS holiday FROM worktbl " & _
                             "WHERE afternoonholiday='3' AND personalcode=? AND workingdate>=? AND workingdate<=?"
                         Rs_worktbl_cmd.Prepared = true
                         Rs_worktbl_cmd.Parameters.Append Rs_worktbl_cmd.CreateParameter("param1", 200, 1, 5, Trim(Rs_staff.Fields.Item("personalcode").Value))
@@ -305,7 +305,15 @@ Set Rs_work = Rs_work_cmd.Execute
                         Rs_worktbl_numRows = 0
                         If Rs_worktbl.BOF And Rs_worktbl.EOF Then
                         Else
-                            holidayCount = holidayCount + Rs_worktbl.Fields.Item("holiday").Value
+                            If IsNull(Rs_worktbl.Fields.Item("holiday").Value) Then
+                                holidayCount = holidayCount + 0
+                            ElseIf Rs_worktbl.Fields.Item("holiday").Value = "" Then
+                                holidayCount = holidayCount + 0
+                            Else
+                                On Error Resume Next
+                                holidayCount = holidayCount + Int(Val(CStr(Rs_worktbl.Fields.Item("holiday").Value)))
+                                On Error Goto 0
+                            End If
                         End If
                         Rs_worktbl.Close()
                         Set Rs_worktbl = Nothing
@@ -313,7 +321,7 @@ Set Rs_work = Rs_work_cmd.Execute
                         
                         ' 有休取得の警告表示設定
                         classholiday = ""
-                        If (holidayCount / 2 < 5) Then
+                        If (CDbl(holidayCount) / 2 < 5) Then
                             If Left(Rs_staff.Fields.Item("grantdate").Value,2) = checkHolidayMM1 Then
                                 classholiday = "abnormality"
                             ElseIf UBound(Filter(checkHolidayMM3, Left(Rs_staff.Fields.Item("grantdate").Value, 2))) <> -1 Then
@@ -322,7 +330,7 @@ Set Rs_work = Rs_work_cmd.Execute
                         End If
                         %>
                         <td width="40px;" nowrap style="text-align:right;" class="<%=classholiday%>">
-                            <% Response.Write(holidayCount / 2) ' 集計結果を2で割ることで実際の有休日数となる %>
+                            <% Response.Write(CDbl(holidayCount) / 2) ' 集計結果を2で割ることで実際の有休日数となる %>
                         </td>
                         <td width="40px;" nowrap style="text-align:right;">
                             <%=Rs_dutyrostertbl_vacationnumber%>
@@ -375,7 +383,7 @@ Set Rs_work = Rs_work_cmd.Execute
                             Set Rs_worktbl_cmd = Server.CreateObject ("ADODB.Command")
                             Rs_worktbl_cmd.ActiveConnection = MM_workdbms_STRING
                             Rs_worktbl_cmd.CommandText = "SELECT personalcode, workingdate, vacationtime FROM worktbl " & _
-                                "WHERE vacationtime > 0 AND personalcode=? AND workingdate LIKE ?"
+                                "WHERE vacationtime > '0' AND vacationtime <> '' AND personalcode=? AND workingdate LIKE ?"
                             Rs_worktbl_cmd.Prepared = true
                             Rs_worktbl_cmd.Parameters.Append Rs_worktbl_cmd.CreateParameter("param1", 200, 1, 5, Trim(Rs_staff.Fields.Item("personalcode").Value))
                             Rs_worktbl_cmd.Parameters.Append Rs_worktbl_cmd.CreateParameter("param2", 200, 1, 8, ymb & "%")
